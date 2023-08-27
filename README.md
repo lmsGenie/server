@@ -2,6 +2,6 @@
 
 # server
 [﻿View on Eraser](https://app.eraser.io/workspace/pPrQuuG2ClvFiEfNcvKf?elements=UBxjGGB1xZpNuTD_quWLuw) 
-
+![diagram-export-27_08_2023, 21_43_41](https://github.com/lmsGenie/server/assets/43786036/02819797-ec75-47c7-80c0-7a184aa6a801)
 
 <!--- Eraser file: https://app.eraser.io/workspace/pPrQuuG2ClvFiEfNcvKf --->
