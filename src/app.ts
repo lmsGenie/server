@@ -7,6 +7,7 @@ import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
 
 import CONFIG from "./configs";
+import morganMiddleware from "./configs/morgan";
 
 const app = express();
 
@@ -30,10 +31,10 @@ app.use(
 );
 app.use(mongoSanitize());
 // Custom
-// app.use(morganMiddleware);
-// if (CONFIG.NODE_ENV === 'production') {
-//   app.use(rateLimiter);
-// }
+if (CONFIG.NODE_ENV === "production") {
+  app.use(morganMiddleware);
+  // app.use(rateLimiter);
+}
 
 /**
  * @SERVER_STATUS
