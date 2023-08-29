@@ -8,10 +8,13 @@ import helmet from "helmet";
 
 import CONFIG from "./configs";
 import morganMiddleware from "./configs/morgan";
+import requestInfo from "./middlewares/requestInfo";
 
 const app = express();
 
 // Middlewares
+// Uncomment the following line if behind a load balancer or reverse proxy
+// app.enable("trust proxy");
 // Built-in
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -31,10 +34,16 @@ app.use(
 );
 app.use(mongoSanitize());
 // Custom
+app.use(morganMiddleware);
 if (CONFIG.NODE_ENV === "production") {
-  app.use(morganMiddleware);
   // app.use(rateLimiter);
 }
+
+// Log all requests
+app.use(requestInfo);
+
+// All routes
+// app.use(CONFIG.API_VERSION, router);
 
 /**
  * @SERVER_STATUS
