@@ -9,8 +9,8 @@
     "lint:fix": "eslint --ignore-path .eslintignore \"src/**/*.ts\" --fix",
     "lint:check": "eslint --ignore-path .eslintignore \"src/**/*.ts\"",
     "prepare": "husky install",
-    "prettier:fix": "prettier --write \"src/**/*.ts\"",
-    "prettier:check": "prettier --check \"src/**/*.ts\"",
+    "format:fix": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\"",
     "start:dev": "nodemon src/server.ts",
     "start:prod": "node dist/server.js",
     "test": "jest"

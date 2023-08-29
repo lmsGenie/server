@@ -8,7 +8,9 @@ import helmet from "helmet";
 
 import CONFIG from "./configs";
 import morganMiddleware from "./configs/morgan";
-import requestInfo from "./middlewares/requestInfo";
+import requestInfo from "./middlewares/requestInfo.middleware";
+import routerV1 from "./routes/v1";
+import HTTP_STATUS from "./utils/httpStatus";
 
 const app = express();
 
@@ -29,7 +31,7 @@ app.use(
       CONFIG.CLIENT_URL,
     ],
     credentials: true,
-    optionsSuccessStatus: 200,
+    optionsSuccessStatus: HTTP_STATUS.OK,
   }),
 );
 app.use(mongoSanitize());
@@ -43,7 +45,7 @@ if (CONFIG.NODE_ENV === "production") {
 app.use(requestInfo);
 
 // All routes
-// app.use(CONFIG.API_VERSION, router);
+app.use("/api/v1", routerV1);
 
 /**
  * @SERVER_STATUS
@@ -52,7 +54,7 @@ app.use(requestInfo);
  * @ACCESS Public
  */
 app.get("/api/ping", (_req, res) => {
-  res.status(200).json({
+  res.status(HTTP_STATUS.OK).json({
     success: true,
     status: "UP",
     message: "PONG",
@@ -61,7 +63,7 @@ app.get("/api/ping", (_req, res) => {
 
 // CatchAll - 404 --- This should be after all the other routes
 app.all("*", (req, res) => {
-  res.status(404).json({
+  res.status(HTTP_STATUS.NOT_FOUND).json({
     success: false,
     message: `Not Found - ${req.method} ${req.originalUrl}`,
   });
