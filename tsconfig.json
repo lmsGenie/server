@@ -3,7 +3,8 @@
     "target": "ES2022",
     "rootDir": "src",
     "outDir": "dist",
-    "baseUrl": "./src",
+    "module": "CommonJS",
+    "baseUrl": "./src" /* Specify the base directory to resolve non-relative module names. */,
     "paths": {
       "@/*": ["*"]
     },

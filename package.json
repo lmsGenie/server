@@ -6,12 +6,12 @@
   "scripts": {
     "build": "rimraf ./dist && swc ./src -d dist",
     "build:start": "pnpm build && pnpm start:prod",
-    "lint": "eslint --ignore-path .eslintignore \"src/**/*.ts\" --fix",
+    "lint:fix": "eslint --ignore-path .eslintignore \"src/**/*.ts\" --fix",
     "lint:check": "eslint --ignore-path .eslintignore \"src/**/*.ts\"",
     "prepare": "husky install",
-    "prettier": "prettier --write \"src/**/*.ts\"",
+    "prettier:fix": "prettier --write \"src/**/*.ts\"",
     "prettier:check": "prettier --check \"src/**/*.ts\"",
-    "start:dev": "ts-node --respawn --pretty --transpile-only --rs src/server.ts",
+    "start:dev": "nodemon src/server.ts",
     "start:prod": "node dist/server.js",
     "test": "jest"
   },
