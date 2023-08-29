@@ -31,7 +31,7 @@ app.use(
 app.use(mongoSanitize());
 // Custom
 // app.use(morganMiddleware);
-// if (process.env.NODE_ENV === 'production') {
+// if (CONFIG.NODE_ENV === 'production') {
 //   app.use(rateLimiter);
 // }
 

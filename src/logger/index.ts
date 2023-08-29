@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import winston from "winston";
 
 import "winston-daily-rotate-file";
@@ -11,7 +12,7 @@ const levels = {
 };
 
 const level = () => {
-  const env = process.env.NODE_ENV || "development";
+  const env = CONFIG.NODE_ENV || "development";
   const isDevelopment = env === "development";
   return isDevelopment ? "debug" : "warn";
 };

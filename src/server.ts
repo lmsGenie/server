@@ -1,4 +1,5 @@
 import app from "./app";
+import CONFIG from "./configs";
 import connectToDB from "./configs/dbConn";
 import Logger from "./logger";
 
@@ -10,13 +11,13 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-const PORT = process.env.PORT || 5000;
+const PORT = CONFIG.PORT || 5000;
 
 const server = app.listen(PORT, async () => {
   try {
     await connectToDB();
     Logger.info(
-      `App is listening at http://localhost:${PORT} in ${process.env.NODE_ENV} mode`,
+      `App is listening at http://localhost:${PORT} in ${CONFIG.NODE_ENV} mode`,
     );
   } catch (error) {
     Logger.error(error);
