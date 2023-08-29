@@ -15,13 +15,11 @@ const CONFIG = {
   USER_VERIFICATION:
     process.env.USER_VERIFICATION_TOKEN_SECRET || "YOUR_SUPER_SECRET",
   EMAIL: {
-    host: process.env.SMTP_HOST || "",
-    port: Number(process.env.SMTP_PORT) || 0,
-    auth: {
-      user: process.env.SMTP_USERNAME || "",
-      pass: process.env.SMTP_PASSWORD || "",
-    },
-    from: process.env.EMAIL_FROM || "",
+    SMTP_HOST: process.env.SMTP_HOST || "",
+    SMTP_PORT: Number(process.env.SMTP_PORT) || 587,
+    SMTP_USER: process.env.SMTP_USER || "",
+    SMTP_PASS: process.env.SMTP_PASS || "",
+    EMAIL_FROM: process.env.EMAIL_FROM || "",
   },
   VERIFY_URL: process.env.VERIFY_URL || "http://localhost:3000",
 };
