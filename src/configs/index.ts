@@ -3,6 +3,27 @@ const CONFIG = {
   PORT: process.env.PORT || 5000,
   CLIENT_URL: process.env.CLIENT_URL || "http://localhost:3000",
   MONGO_URI: process.env.MONGO_URI || "mongodb://localhost:27017/lmsgenie",
+  JWT: {
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET || "YOUR_SUPER_SECRET",
+    ACCESS_TOKEN_EXPIRY_IN_MINS:
+      process.env.ACCESS_TOKEN_EXPIRY_IN_MINS || "360",
+    REFRESH_TOKEN_SECRET:
+      process.env.REFRESH_TOKEN_SECRET || "YOUR_SUPER_SECRET",
+    REFRESH_TOKEN_EXPIRY_IN_DAYS:
+      process.env.REFRESH_TOKEN_EXPIRY_IN_DAYS || "7",
+  },
+  USER_VERIFICATION:
+    process.env.USER_VERIFICATION_TOKEN_SECRET || "YOUR_SUPER_SECRET",
+  EMAIL: {
+    host: process.env.SMTP_HOST || "",
+    port: Number(process.env.SMTP_PORT) || 0,
+    auth: {
+      user: process.env.SMTP_USERNAME || "",
+      pass: process.env.SMTP_PASSWORD || "",
+    },
+    from: process.env.EMAIL_FROM || "",
+  },
+  VERIFY_URL: process.env.VERIFY_URL || "http://localhost:3000",
 };
 
 export default CONFIG;

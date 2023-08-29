@@ -1,6 +1,6 @@
 import express, { Router } from "express";
 
-// import authRoute from "./auth.route";
+import authRoute from "./auth.route";
 
 const routerV1: Router = express.Router();
 
@@ -10,10 +10,10 @@ interface DefaultRoutes {
 }
 
 const defaultRoutes: DefaultRoutes[] = [
-  // {
-  //   path: "/auth",
-  //   route: authRoute,
-  // },
+  {
+    path: "/auth",
+    route: authRoute,
+  },
 ];
 
 defaultRoutes.forEach((route: DefaultRoutes) => {

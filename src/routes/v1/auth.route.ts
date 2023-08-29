@@ -1,18 +1,23 @@
+import authController from "@/controllers/v1/auth.controller";
 import { Router } from "express";
 
 import validate from "@/middlewares/validate.middleware";
 import authValidation from "@/validations/auth.validation";
 
-const router = Router();
+const authRoute = Router();
 
 /**
  * @ROUTE {{URL}}/api/v1/auth
  */
-router.route("/").post(validate(authValidation.loginUserSchema), loginUser);
+authRoute
+  .route("/")
+  .post(validate(authValidation.loginUserSchema), authController.login);
 
 /**
  * @ROUTE {{URL}}/api/v1/auth/new
  */
-router
+authRoute
   .route("/new")
-  .post(validate(authValidation.registerUserSchema), registerUser);
+  .post(validate(authValidation.registerUserSchema), authController.register);
+
+export default authRoute;
