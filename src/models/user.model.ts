@@ -63,7 +63,6 @@ const userSchema = new Schema<IUser>(
       type: String,
       required: [true, "Password is required"],
       minlength: [8, "Password must be atleast 8 characters long"],
-      select: false,
     },
     passwordChangedAt: Date,
     role: {
@@ -83,10 +82,6 @@ const userSchema = new Schema<IUser>(
     isEmailVerified: {
       type: Boolean,
       default: false,
-    },
-    loginCount: {
-      type: Number,
-      default: 0,
     },
     refreshToken: [String],
   },
@@ -116,9 +111,7 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods = {
   comparePassword: async function (plainPassword: string) {
-    const result = await bcrypt.compare(plainPassword, this.password);
-
-    return result;
+    return await bcrypt.compare(plainPassword, this.password);
   },
   generateVerificationToken: async function () {
     const verificationToken = await jwt.sign(
