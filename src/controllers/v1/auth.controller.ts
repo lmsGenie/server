@@ -39,7 +39,16 @@ const login = asyncHandler(async (req, res) => {
   return commonResponse(res, "User login successfully", { user, ...token });
 });
 
+const verify = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+
+  const user = await authService.verifyEmail(token);
+
+  return commonResponse(res, "Email verified successfully", user);
+});
+
 export default {
   register,
   login,
+  verify,
 };

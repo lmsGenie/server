@@ -8,6 +8,7 @@ import helmet from "helmet";
 
 import CONFIG from "./configs";
 import morganMiddleware from "./configs/morgan";
+import errorMiddleware from "./middlewares/error.middleware";
 import requestInfo from "./middlewares/requestInfo.middleware";
 import routerV1 from "./routes/v1";
 import HTTP_STATUS from "./utils/httpStatus";
@@ -68,5 +69,8 @@ app.all("*", (req, res) => {
     message: `Not Found - ${req.method} ${req.originalUrl}`,
   });
 });
+
+// Custom error middleware
+app.use(errorMiddleware);
 
 export default app;

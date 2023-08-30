@@ -116,7 +116,9 @@ userSchema.pre("save", async function (next) {
 
 userSchema.methods = {
   comparePassword: async function (plainPassword: string) {
-    return await bcrypt.compare(plainPassword, this.password);
+    const result = await bcrypt.compare(plainPassword, this.password);
+
+    return result;
   },
   generateVerificationToken: async function () {
     const verificationToken = await jwt.sign(

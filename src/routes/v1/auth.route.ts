@@ -20,4 +20,9 @@ authRoute
   .route("/new")
   .post(validate(authValidation.registerUserSchema), authController.register);
 
+/**
+ * @ROUTE {{URL}}/api/v1/auth/verify/:token
+ */
+authRoute.route("/verify/:token").get(authController.verify);
+
 export default authRoute;
