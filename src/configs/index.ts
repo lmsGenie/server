@@ -19,9 +19,9 @@ const CONFIG = {
     SMTP_PORT: Number(process.env.SMTP_PORT) || 587,
     SMTP_USER: process.env.SMTP_USER || "",
     SMTP_PASS: process.env.SMTP_PASS || "",
-    EMAIL_FROM: process.env.EMAIL_FROM || "",
+    EMAIL_FROM: process.env.SMTP_EMAIL_FROM || "",
   },
-  VERIFY_URL: process.env.VERIFY_URL || "http://localhost:3000",
+  VERIFY_URL: process.env.VERIFY_URL || "http://localhost:3000/verify-email",
 };
 
 export default CONFIG;

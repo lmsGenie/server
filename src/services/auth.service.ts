@@ -3,8 +3,18 @@ import HTTP_STATUS from "@/utils/httpStatus";
 
 import userService from "./user.service";
 
-const registerUser = async (name: string, email: string, password: string) => {
-  const user = await userService.createUser({ name, email, password });
+const registerUser = async (
+  firstName: string,
+  lastName: string,
+  email: string,
+  password: string,
+) => {
+  const user = await userService.createUser({
+    firstName,
+    lastName,
+    email,
+    password,
+  });
   return user;
 };
 

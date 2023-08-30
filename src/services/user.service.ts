@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 import { ICreateUser } from "@/types/user.type";
 
 import AppErr from "@/helpers/appErr";
@@ -15,7 +17,12 @@ const getUserByEmail = async (email: string) => {
   return UserModel.findOne({ email });
 };
 
+const getUserById = async (id: Types.ObjectId) => {
+  return UserModel.findById(id);
+};
+
 export default {
   createUser,
   getUserByEmail,
+  getUserById,
 };

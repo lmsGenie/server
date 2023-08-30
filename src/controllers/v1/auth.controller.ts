@@ -5,13 +5,22 @@ import emailService from "@/services/email.service";
 import tokenService from "@/services/token.service";
 
 const register = asyncHandler(async (req, res) => {
-  const { name, email, password } = req.body;
+  const { firstName, lastName, email, password } = req.body;
 
-  const user = await authService.registerUser(name, email, password);
+  const user = await authService.registerUser(
+    firstName,
+    lastName,
+    email,
+    password,
+  );
 
   const verificationToken = await user.generateVerificationToken();
 
-  await emailService.sendVerificationMail(email, name, verificationToken);
+  await emailService.sendVerificationMail(
+    email,
+    firstName + " " + lastName,
+    verificationToken,
+  );
 
   user.password = undefined as unknown as string;
 

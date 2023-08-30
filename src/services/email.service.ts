@@ -5,6 +5,7 @@ import ejs from "ejs";
 import nodemailer from "nodemailer";
 
 import logger from "../logger";
+import Logger from "../logger";
 
 const transport = nodemailer.createTransport({
   host: CONFIG.EMAIL.SMTP_HOST, // hostname
@@ -36,11 +37,13 @@ const sendVerificationMail = async (
 ) => {
   const subject = "Email Verification";
 
-  const template = path.join(__dirname, "../template/verification.ejs");
+  const template = path.join(__dirname, "../templates/verification.ejs");
 
   const url = CONFIG.VERIFY_URL + encodeURIComponent(token);
 
   const data = await ejs.renderFile(template, { name, url });
+
+  Logger.info(data);
 
   return sendEmail(to, subject, data);
 };
