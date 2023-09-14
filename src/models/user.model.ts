@@ -13,6 +13,12 @@ export interface IUser extends Document {
   password: string;
   passwordChangedAt: number;
   role: string;
+  biography: string;
+  socialProfiles: string[];
+  profilePicture: string;
+  slug: string;
+  rating: number;
+  totalStudents: number;
   isActive: boolean;
   isEmailVerified: boolean;
   loginCount: number;
@@ -75,6 +81,35 @@ const userSchema = new Schema<IUser>(
       ],
       default: ROLES_LIST.STUDENT,
     },
+    biography: {
+      type: String,
+      maxlength: [150, "Biography must be less than 150 characters"],
+    },
+    socialProfiles: [
+      {
+        type: String,
+      },
+    ],
+    profilePicture: {
+      public_id: String,
+      secure_url: String,
+    },
+    slug: {
+      type: String,
+      required: [true, "Slug is required."],
+      unique: true,
+      lowercase: true,
+    },
+    rating: {
+      type: Number,
+      min: [1, "Rating must be atleast 1"],
+      max: [5, "Rating must be less than or equal to 5"],
+      // default: 0,
+    },
+    totalStudents: {
+      type: Number,
+      default: 0,
+    },
     isActive: {
       type: Boolean,
       default: true,
@@ -90,17 +125,20 @@ const userSchema = new Schema<IUser>(
   },
 );
 
+// Static method to check if the email is already taken or not
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
 
+// Hash password everytime if the password field is modified
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 10);
 });
 
+// Update passwordChangedAt field when password is changed
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password") || this.isNew) return next();
 
