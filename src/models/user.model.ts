@@ -19,6 +19,7 @@ export interface IUser extends Document {
   slug: string;
   rating: number;
   totalStudents: number;
+  enrolledCourses: Schema.Types.ObjectId[];
   isActive: boolean;
   isEmailVerified: boolean;
   loginCount: number;
@@ -110,6 +111,12 @@ const userSchema = new Schema<IUser>(
       type: Number,
       default: 0,
     },
+    enrolledCourses: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "Course",
+      },
+    ],
     isActive: {
       type: Boolean,
       default: true,
