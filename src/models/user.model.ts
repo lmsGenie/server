@@ -5,21 +5,26 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Document, Model, model, Schema } from "mongoose";
 
+export interface IWishlist extends Document {
+  courses: Schema.Types.ObjectId[];
+}
+
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
   password: string;
-  passwordChangedAt: number;
+  passwordChangedAt?: number | undefined;
   role: string;
-  biography: string;
-  socialProfiles: string[];
-  profilePicture: string;
+  biography?: string;
+  socialProfiles?: string[];
+  profilePicture?: string;
   slug: string;
-  rating: number;
-  totalStudents: number;
-  enrolledCourses: Schema.Types.ObjectId[];
+  rating?: number;
+  totalStudents?: number;
+  enrolledCourses?: Schema.Types.ObjectId[];
+  wishlist: IWishlist;
   isActive: boolean;
   isEmailVerified: boolean;
   loginCount: number;
@@ -28,9 +33,40 @@ export interface IUser extends Document {
   generateVerificationToken(): string;
 }
 
+interface IEnrolledCourse extends Document {
+  courses: Schema.Types.ObjectId[];
+  progress: {
+    currentSection: Schema.Types.ObjectId;
+    currentLecture: Schema.Types.ObjectId;
+    watchedLectures: Schema.Types.ObjectId[];
+    completed: boolean;
+  };
+}
+
 interface IUserMethod extends Model<IUser> {
   isEmailTaken(email: string): boolean;
 }
+
+const wishlistSchema = new Schema<IWishlist>({
+  courses: {
+    type: [Schema.Types.ObjectId],
+    ref: "Course",
+  },
+});
+
+const enrolledCoursesSchema = new Schema<IEnrolledCourse>({
+  courses: [
+    {
+      course: { type: Schema.Types.ObjectId, ref: "Course" },
+      progress: {
+        currentSection: { type: Schema.Types.ObjectId, ref: "Section" },
+        currentLecture: { type: Schema.Types.ObjectId, ref: "Lecture" },
+        lecturesWatched: [{ type: Schema.Types.ObjectId, ref: "Lecture" }],
+        completed: Boolean,
+      },
+    },
+  ],
+});
 
 const userSchema = new Schema<IUser>(
   {
@@ -89,6 +125,7 @@ const userSchema = new Schema<IUser>(
     socialProfiles: [
       {
         type: String,
+        profileUrl: String,
       },
     ],
     profilePicture: {
@@ -111,12 +148,8 @@ const userSchema = new Schema<IUser>(
       type: Number,
       default: 0,
     },
-    enrolledCourses: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "Course",
-      },
-    ],
+    enrolledCourses: enrolledCoursesSchema,
+    wishlist: wishlistSchema,
     isActive: {
       type: Boolean,
       default: true,

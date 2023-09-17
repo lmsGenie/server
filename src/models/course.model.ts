@@ -11,14 +11,14 @@ export interface ICourse extends Document {
   language: string;
   topic: string;
   thumbnail: string;
-  trailer: string;
+  trailer?: string;
   description: string;
   courseOutline: string[];
   targetAudience: string[];
   preRequisites: string[];
-  welcomeMessage: string;
-  completionMessage: string;
-  completionRate: number;
+  welcomeMessage?: string;
+  completionMessage?: string;
+  completionRate?: number;
   averageRating: number;
   sections: Schema.Types.ObjectId[];
   tools: Schema.Types.ObjectId[];
@@ -29,7 +29,7 @@ export interface ICourse extends Document {
     currencyCode: string;
     currencySymbol: string;
   };
-  discountedPrice: {
+  discountedPrice?: {
     price: number;
     currencyName: string;
     currencyCode: string;
@@ -37,8 +37,8 @@ export interface ICourse extends Document {
   };
   discountPercentage: number;
   instructors: Schema.Types.ObjectId[];
-  totalEnrollments: number;
-  reviews: Schema.Types.ObjectId[];
+  totalEnrollments?: number;
+  reviews?: Schema.Types.ObjectId[];
 }
 
 const courseSchema = new Schema<ICourse>(
