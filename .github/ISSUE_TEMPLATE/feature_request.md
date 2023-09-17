@@ -1,7 +1,7 @@
 ---
 name: Feature request
 about: Suggest an idea for this project
-title: "[FEAT] : Short title"
+title: "[FEAT]: Short title"
 labels: enhancement
 assignees: ''
 
