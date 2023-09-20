@@ -60,6 +60,6 @@ Checkout our Database Design.
 - `.husky`: Husky config files.
 
 ## Want to contribute?
-Feel like contributing? That's awesome! We have a [contributing guide](https://github.com/lmsGenie/server/blob/main/.github/CONTRIBUTING.md) to help guide you. 
+Feel like contributing? That's awesome! We have a [contributing guide](.github/CONTRIBUTING.md) to help guide you. 
 
 Want to discuss something? [Create a discussion](https://github.com/orgs/lmsGenie/discussions/new/choose)
