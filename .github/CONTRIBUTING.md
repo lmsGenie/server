@@ -10,7 +10,9 @@ To get an overview of the project, read the [README](README.md). Here are the st
 
 ### 1. Create a new issue
 
-You can either pick an existing issue, or if you spot a new feature, a bug, or an improvment, so you can open a new issue using a relevant [issue form](https://github.com/lmsGenie/client/issues/new/choose).
+You can either pick an existing issue, or if you spot a new feature, a bug, or an improvment, so you can open a new issue using a relevant issue form.
+- [Create a Frontend issue](https://github.com/lmsGenie/client/issues/new/choose)
+- [Create a Backend issue](https://github.com/lmsGenie/server/issues/new/choose)
 
 Note: Before making a new issue please [search if an issue already exists](https://docs.github.com/en/github/searching-for-information-on-github/searching-on-github/searching-issues-and-pull-requests#search-by-the-title-body-or-comments).
 - [Frontend Issues](https://github.com/lmsGenie/client/issues)
