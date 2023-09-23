@@ -14,6 +14,9 @@ dependencies:
   cors:
     specifier: ^2.8.5
     version: 2.8.5
+  dayjs:
+    specifier: ^1.11.9
+    version: 1.11.9
   dotenv:
     specifier: ^16.3.1
     version: 16.3.1
@@ -35,9 +38,6 @@ dependencies:
   jsonwebtoken:
     specifier: ^9.0.1
     version: 9.0.1
-  moment:
-    specifier: ^2.29.4
-    version: 2.29.4
   mongoose:
     specifier: ^7.4.5
     version: 7.4.5
@@ -3407,6 +3407,13 @@ packages:
       }
     engines: { node: ">=8" }
     dev: true
+
+  /dayjs@1.11.9:
+    resolution:
+      {
+        integrity: sha512-QvzAURSbQ0pKdIye2txOzNaHmxtUBXerpY0FJsFXUMKbIZeFm5ht1LS/jFsrncjnmtv8HsG0W2g6c0zUjZWmpA==,
+      }
+    dev: false
 
   /debug@2.6.9:
     resolution:

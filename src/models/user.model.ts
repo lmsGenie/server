@@ -5,14 +5,26 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { Document, Model, model, Schema } from "mongoose";
 
+export interface IWishlist extends Document {
+  courses: Schema.Types.ObjectId[];
+}
+
 export interface IUser extends Document {
   firstName: string;
   lastName: string;
   email: string;
   phoneNumber: string;
   password: string;
-  passwordChangedAt: number;
+  passwordChangedAt?: number | undefined;
   role: string;
+  biography?: string;
+  socialProfiles?: string[];
+  profilePicture?: string;
+  slug: string;
+  rating?: number;
+  totalStudents?: number;
+  enrolledCourses?: Schema.Types.ObjectId[];
+  wishlist: IWishlist;
   isActive: boolean;
   isEmailVerified: boolean;
   loginCount: number;
@@ -21,9 +33,40 @@ export interface IUser extends Document {
   generateVerificationToken(): string;
 }
 
+interface IEnrolledCourse extends Document {
+  courses: Schema.Types.ObjectId[];
+  progress: {
+    currentSection: Schema.Types.ObjectId;
+    currentLecture: Schema.Types.ObjectId;
+    watchedLectures: Schema.Types.ObjectId[];
+    completed: boolean;
+  };
+}
+
 interface IUserMethod extends Model<IUser> {
   isEmailTaken(email: string): boolean;
 }
+
+const wishlistSchema = new Schema<IWishlist>({
+  courses: {
+    type: [Schema.Types.ObjectId],
+    ref: "Course",
+  },
+});
+
+const enrolledCoursesSchema = new Schema<IEnrolledCourse>({
+  courses: [
+    {
+      course: { type: Schema.Types.ObjectId, ref: "Course" },
+      progress: {
+        currentSection: { type: Schema.Types.ObjectId, ref: "Section" },
+        currentLecture: { type: Schema.Types.ObjectId, ref: "Lecture" },
+        lecturesWatched: [{ type: Schema.Types.ObjectId, ref: "Lecture" }],
+        completed: Boolean,
+      },
+    },
+  ],
+});
 
 const userSchema = new Schema<IUser>(
   {
@@ -75,6 +118,38 @@ const userSchema = new Schema<IUser>(
       ],
       default: ROLES_LIST.STUDENT,
     },
+    biography: {
+      type: String,
+      maxlength: [150, "Biography must be less than 150 characters"],
+    },
+    socialProfiles: [
+      {
+        type: String,
+        profileUrl: String,
+      },
+    ],
+    profilePicture: {
+      public_id: String,
+      secure_url: String,
+    },
+    slug: {
+      type: String,
+      required: [true, "Slug is required."],
+      unique: true,
+      lowercase: true,
+    },
+    rating: {
+      type: Number,
+      min: [1, "Rating must be atleast 1"],
+      max: [5, "Rating must be less than or equal to 5"],
+      // default: 0,
+    },
+    totalStudents: {
+      type: Number,
+      default: 0,
+    },
+    enrolledCourses: enrolledCoursesSchema,
+    wishlist: wishlistSchema,
     isActive: {
       type: Boolean,
       default: true,
@@ -90,17 +165,20 @@ const userSchema = new Schema<IUser>(
   },
 );
 
+// Static method to check if the email is already taken or not
 userSchema.statics.isEmailTaken = async function (email, excludeUserId) {
   const user = await this.findOne({ email, _id: { $ne: excludeUserId } });
   return !!user;
 };
 
+// Hash password everytime if the password field is modified
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password")) return next();
 
   this.password = await bcrypt.hash(this.password, 10);
 });
 
+// Update passwordChangedAt field when password is changed
 userSchema.pre("save", async function (next) {
   if (!this.isModified("password") || this.isNew) return next();
 
