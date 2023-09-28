@@ -31,6 +31,7 @@ export interface IUser extends Document {
   refreshToken: string[];
   comparePassword: (password: string) => Promise<boolean>;
   generateVerificationToken(): string;
+  generateGravatar: (size: number) => string;
 }
 
 interface IEnrolledCourse extends Document {
@@ -200,6 +201,19 @@ userSchema.methods = {
 
     return verificationToken;
   },
+  generateGravatar: function gravatar(size) {
+    if (!size) {
+      size = 200;
+    }
+    
+    if (!this.email) {
+      return `https://gravatar.com/avatar/00000000000000000000000000000000?s=${size}&d=robohash`;
+    }
+    
+    const md5 = crypto.createHash('md5').update(this.email).digest('hex');
+    
+    return `https://gravatar.com/avatar/${md5}?s=${size}&d=robohash`;
+  }
 };
 
 userSchema.index({ email: 1 });
