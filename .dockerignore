@@ -1,0 +1,16 @@
+.env
+.env.*
+.vscode
+node_modules
+logs
+*.log
+npm-debug.log*
+.git
+.gitignore
+Dockerfile
+.dockerignore
+docker-compose.*
+dist
+.npm
+.DS_Store
+*.swp
