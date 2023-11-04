@@ -1,4 +1,6 @@
 /* eslint-disable no-unused-vars */
+import crypto from "crypto";
+
 import CONFIG from "@/configs";
 import { ROLES_LIST } from "@/enums";
 import bcrypt from "bcrypt";
@@ -201,19 +203,19 @@ userSchema.methods = {
 
     return verificationToken;
   },
-  generateGravatar: function gravatar(size) {
+  generateGravatar: function gravatar(size: number) {
     if (!size) {
       size = 200;
     }
-    
+
     if (!this.email) {
       return `https://gravatar.com/avatar/00000000000000000000000000000000?s=${size}&d=robohash`;
     }
-    
-    const md5 = crypto.createHash('md5').update(this.email).digest('hex');
-    
+
+    const md5 = crypto.createHash("md5").update(this.email).digest("hex");
+
     return `https://gravatar.com/avatar/${md5}?s=${size}&d=robohash`;
-  }
+  },
 };
 
 userSchema.index({ email: 1 });
