@@ -62,31 +62,6 @@ app.get("/api/ping", (_req, res) => {
   });
 });
 
-// Below is only test route, will be removed after testing
-// app.post("/upload", async (_req: Request, res: Response) => {
-//   const options = {
-//     use_filename: true,
-//     unique_filename: false,
-//     overwrite: true,
-//     folder: "lmsgenie-data/profiles",
-//     public_id: "user1",
-//   };
-
-//   try {
-//     const result = await uploadImage("upload/COLLEGE_ID.jpeg", options);
-
-//     res.send({
-//       success: true,
-//       result: result,
-//     });
-//   } catch (error) {
-//     res.send({
-//       success: false,
-//       message: "Something went wrong, please try again",
-//     });
-//   }
-// });
-
 // CatchAll - 404 --- This should be after all the other routes
 app.all("*", (req, res) => {
   res.status(HTTP_STATUS.NOT_FOUND).json({
