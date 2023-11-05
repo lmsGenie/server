@@ -20,7 +20,6 @@
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.441.0",
-    "@aws-sdk/types": "^3.433.0",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
     "cookie-parser": "^1.4.6",
@@ -41,6 +40,7 @@
     "zod": "^3.22.2"
   },
   "devDependencies": {
+    "@aws-sdk/types": "^3.433.0",
     "@commitlint/cli": "^17.7.1",
     "@commitlint/config-conventional": "^17.7.0",
     "@ianvs/prettier-plugin-sort-imports": "^4.1.0",
