@@ -45,6 +45,7 @@ export const uploadImage = async (
 
     //upload file
     const res = await cloudinary.uploader.upload(filePath, uploadOptions);
+
     return res;
   } else {
     //check required parameters for S3 PutObjectCommand
@@ -66,7 +67,9 @@ export const uploadImage = async (
 
     //upload file
     const command = new PutObjectCommand(commandOptions);
+
     const res = await client.send(command);
+
     return res;
   }
 };

@@ -2,7 +2,7 @@ import "dotenv/config";
 
 import cookieParser from "cookie-parser";
 import cors from "cors";
-import express, { Request, Response } from "express";
+import express from "express";
 import mongoSanitize from "express-mongo-sanitize";
 import helmet from "helmet";
 
@@ -11,7 +11,6 @@ import morganMiddleware from "./configs/morgan";
 import errorMiddleware from "./middlewares/error.middleware";
 import requestInfo from "./middlewares/requestInfo.middleware";
 import routerV1 from "./routes/v1";
-import { uploadImage } from "./services/storage.service";
 import HTTP_STATUS from "./utils/httpStatus";
 
 const app = express();
@@ -63,6 +62,31 @@ app.get("/api/ping", (_req, res) => {
   });
 });
 
+// Below is only test route, will be removed after testing
+// app.post("/upload", async (_req: Request, res: Response) => {
+//   const options = {
+//     use_filename: true,
+//     unique_filename: false,
+//     overwrite: true,
+//     folder: "lmsgenie-data/profiles",
+//     public_id: "user1",
+//   };
+
+//   try {
+//     const result = await uploadImage("upload/COLLEGE_ID.jpeg", options);
+
+//     res.send({
+//       success: true,
+//       result: result,
+//     });
+//   } catch (error) {
+//     res.send({
+//       success: false,
+//       message: "Something went wrong, please try again",
+//     });
+//   }
+// });
+
 // CatchAll - 404 --- This should be after all the other routes
 app.all("*", (req, res) => {
   res.status(HTTP_STATUS.NOT_FOUND).json({
@@ -71,34 +95,7 @@ app.all("*", (req, res) => {
   });
 });
 
-// Custom error middleware
+// Custom error middleware (⚠️ should always be the last middleware)
 app.use(errorMiddleware);
-
-// Below is only test route, will be removed after testing
-app.post("/upload", async (req: Request, res: Response) => {
-  const options = {
-    use_filename: true,
-    unique_filename: false,
-    overwrite: true,
-    folder: "lmsgenie-data/profiles",
-    public_id: "user1",
-  };
-  try {
-    const result = await uploadImage(
-      "upload/COLLEGE_ID.jpeg",
-      options,
-      "CLOUDINARY",
-    );
-
-    res.send({
-      success: true,
-      result: result,
-    });
-  } catch (error) {
-    res.send({
-      success: false,
-    });
-  }
-});
 
 export default app;
