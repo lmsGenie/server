@@ -26,6 +26,10 @@ const CONFIG = {
     EMAIL_FROM: process.env.SMTP_EMAIL_FROM || "",
   },
   VERIFY_URL: process.env.VERIFY_URL || "http://localhost:3000/verify-email",
+  CLOUDINARY_CLOUD_NAME: process.env.CLOUDINARY_CLOUD_NAME,
+  CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
+  CLOUDINARY_SECRET_KEY: process.env.CLOUDINARY_SECRET_KEY,
+  S3_BUCKET_REGION: process.env.S3_BUCKET_REGION,
 };
 
 export default CONFIG;

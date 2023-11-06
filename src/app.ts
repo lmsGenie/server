@@ -70,7 +70,7 @@ app.all("*", (req, res) => {
   });
 });
 
-// Custom error middleware
+// Custom error middleware (⚠️ should always be the last middleware)
 app.use(errorMiddleware);
 
 export default app;
