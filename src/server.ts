@@ -11,7 +11,7 @@ process.on("uncaughtException", (err) => {
   process.exit(1);
 });
 
-const PORT = CONFIG.PORT || 5000;
+const PORT = CONFIG.PORT || 5500;
 
 const server = app.listen(PORT, async () => {
   try {

@@ -1,8 +1,8 @@
+import couponController from "@/controllers/v1/coupon.controller";
 import { ROLES_LIST } from "@/enums";
 import { Router } from "express";
 
 import { authorizeRoles, isLoggedIn } from "@/middlewares/auth.middleware";
-import HTTP_STATUS from "@/utils/httpStatus";
 
 const couponRoute = Router();
 
@@ -12,13 +12,8 @@ const couponRoute = Router();
 couponRoute.get(
   "/",
   isLoggedIn,
-  authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR, ROLES_LIST.ASSISTANT),
-  (_req, res) => {
-    res.status(HTTP_STATUS.OK).json({
-      success: true,
-      message: "Coupons",
-    });
-  },
+  authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  couponController.getAll,
 );
 
 export default couponRoute;

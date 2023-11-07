@@ -6,7 +6,7 @@ services:
     build: . # Path to Dockerfile
     restart: unless-stopped
     ports:
-      - 5000:5000 # Left is local and right is docker (I Believe)
+      - 5500:5500 # Left is local and right is docker (I Believe)
       - 9229:9229 # Debugger port
     # Volumes is used so that we do not build the entire image upon a single file change
     volumes: # For persistence storage
@@ -20,7 +20,7 @@ services:
       - redis
     environment:
       - NODE_ENV=development
-      - PORT=5000
+      - PORT=5500
       - MONGO_URI=mongodb://root:rootpassword@mongodb:27017/lms-genie-dev?authSource=admin&retryWrites=true
       - REDIS_HOST=redis
       - REDIS_PORT=6379
