@@ -1,3 +1,5 @@
+import { ROLES_LIST } from "@/enums";
+
 import { ProtectedRequest } from "@/types/app-request";
 
 import AppErr from "@/helpers/appErr";
@@ -43,7 +45,7 @@ export const isLoggedIn = asyncHandler(
   },
 );
 
-export const authorizeRoles = (...roles: number[]) =>
+export const authorizeRoles = (...roles: ROLES_LIST[]) =>
   asyncHandler(async (req: ProtectedRequest, _res, next) => {
     if (!roles.includes(req.user?.role)) {
       return next(
