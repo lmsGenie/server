@@ -25,7 +25,7 @@ const createCourse = asyncHandler(async (req, res) => {
     courseDuration,
   );
 
-  return commonResponse(res, "Course created successfully", course);
+  return commonResponse(res, "Course created successfully", course, 201);
 });
 
 const createCategory = asyncHandler(async (req, res) => {
@@ -33,7 +33,7 @@ const createCategory = asyncHandler(async (req, res) => {
 
   const category = await courseService.createCategory(type, name);
 
-  return commonResponse(res, "Category created successfully", category);
+  return commonResponse(res, "Category created successfully", category, 201);
 });
 
 export default {
