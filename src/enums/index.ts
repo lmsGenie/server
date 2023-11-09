@@ -16,7 +16,6 @@ export enum DURATION_UNITS {
   MINUTES = "MINUTES",
   HOURS = "HOURS",
   DAYS = "DAYS",
-  MONTHS = "MONTHS",
 }
 
 export enum CATEGORY_TYPES {

@@ -79,12 +79,7 @@ const createCourseSchema = z.object({
 
     courseDuration: z.object({
       unit: z.enum(
-        [
-          DURATION_UNITS.MINUTES,
-          DURATION_UNITS.HOURS,
-          DURATION_UNITS.DAYS,
-          DURATION_UNITS.MONTHS,
-        ],
+        [DURATION_UNITS.MINUTES, DURATION_UNITS.HOURS, DURATION_UNITS.DAYS],
         {
           required_error: "Course duration unit is required",
           invalid_type_error: `Course duration unit must be one of ${Object.values(

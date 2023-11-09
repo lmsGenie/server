@@ -1,4 +1,4 @@
-import { COURSE_LEVELS, DURATION_UNITS } from "@/enums";
+import { CATEGORY_TYPES, COURSE_LEVELS, DURATION_UNITS } from "@/enums";
 import { Document, model, Schema } from "mongoose";
 
 import CURRENCY_LIST from "@/utils/currency";
@@ -48,14 +48,14 @@ export interface ICourse extends Document {
 }
 
 export interface ICategory extends Document {
-  type: "MAIN_CATEGORY" | "SUB_CATEGORY";
+  type: CATEGORY_TYPES.MAIN_CATEGORY | CATEGORY_TYPES.SUB_CATEGORY;
   name: string;
 }
 
 const categorySchema = new Schema<ICategory>({
   type: {
     type: String,
-    enum: ["MAIN_CATEGORY", "SUB_CATEGORY"],
+    enum: Object.values(CATEGORY_TYPES),
     required: [true, "Category type is required"],
   },
   name: {
