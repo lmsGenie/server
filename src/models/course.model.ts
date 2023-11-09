@@ -1,6 +1,8 @@
+import { COURSE_LEVELS, DURATION_UNITS } from "@/enums";
 import { Document, model, Schema } from "mongoose";
 
 import CURRENCY_LIST from "@/utils/currency";
+import LANGUAGE_LIST from "@/utils/language";
 
 export interface ICourse extends Document {
   title: string;
@@ -10,20 +12,20 @@ export interface ICourse extends Document {
   slug: string;
   language: string;
   topic: string;
-  thumbnail: string;
+  thumbnail?: string;
   trailer?: string;
-  description: string;
-  courseOutline: string[];
-  targetAudience: string[];
-  preRequisites: string[];
+  description?: string;
+  courseOutline?: string[];
+  targetAudience?: string[];
+  preRequisites?: string[];
   welcomeMessage?: string;
   completionMessage?: string;
   completionRate?: number;
-  averageRating: number;
-  sections: Schema.Types.ObjectId[];
-  tools: Schema.Types.ObjectId[];
+  averageRating?: number;
+  sections?: Schema.Types.ObjectId[];
+  tools?: Schema.Types.ObjectId[];
   courseLevel: string;
-  listPrice: {
+  listPrice?: {
     price: number;
     currencyName: string;
     currencyCode: string;
@@ -35,11 +37,35 @@ export interface ICourse extends Document {
     currencyCode: string;
     currencySymbol: string;
   };
-  discountPercentage: number;
-  instructors: Schema.Types.ObjectId[];
+  discountPercentage?: number;
+  instructors?: Schema.Types.ObjectId[];
   totalEnrollments?: number;
   reviews?: Schema.Types.ObjectId[];
+  courseDuration: {
+    unit: string;
+    value: number;
+  };
 }
+
+export interface ICategory extends Document {
+  type: "MAIN_CATEGORY" | "SUB_CATEGORY";
+  name: string;
+}
+
+const categorySchema = new Schema<ICategory>({
+  type: {
+    type: String,
+    enum: ["MAIN_CATEGORY", "SUB_CATEGORY"],
+    required: [true, "Category type is required"],
+  },
+  name: {
+    type: String,
+    required: [true, "Category name is required"],
+    minlength: [8, "Category name must be atleast 8 characters long"],
+    maxlength: [120, "Category name cannot be more than 120 characters"],
+    trim: true,
+  },
+});
 
 const courseSchema = new Schema<ICourse>(
   {
@@ -73,45 +99,34 @@ const courseSchema = new Schema<ICourse>(
     ],
     slug: {
       type: String,
-      required: [true, "Slug is required."],
+      required: [true, "Course Slug is required"],
       unique: true,
       lowercase: true,
     },
     language: {
       type: String,
+      enum: LANGUAGE_LIST,
       required: [true, "Course language is required."],
-      lowercase: true,
     },
     topic: [
       {
         type: String,
-        required: [true, "Course language is required."],
+        required: [true, "Course topic is required."],
+        minlength: [2, "Course topic must be atleast 8 characters long"],
+        maxlength: [80, "Course topic cannot be more than 120 characters"],
         trim: true,
       },
     ],
     thumbnail: {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      secure_url: {
-        type: String,
-        required: true,
-      },
+      public_id: String,
+      secure_url: String,
     },
     trailer: {
-      public_id: {
-        type: String,
-        required: true,
-      },
-      secure_url: {
-        type: String,
-        required: true,
-      },
+      public_id: String,
+      secure_url: String,
     },
     description: {
       type: String,
-      required: [true, "Course description is required"],
       minlength: [100, "Course description must be at least 100 characters"],
       maxlength: [
         2500,
@@ -124,7 +139,6 @@ const courseSchema = new Schema<ICourse>(
       type: [
         {
           type: String,
-          required: [true, "Course outline is required"],
           maxlength: [40, "Course outline cannot be more than 40 characters"],
         },
       ],
@@ -136,16 +150,10 @@ const courseSchema = new Schema<ICourse>(
       },
     },
     // This field is who is this course for?
-    targetAudience: [
-      {
-        type: String,
-        required: [true, "Target audience is required"],
-      },
-    ],
+    targetAudience: [String],
     preRequisites: [
       {
         type: String,
-        required: [true, "Course pre requisites is required"],
         trim: true,
       },
     ],
@@ -162,34 +170,26 @@ const courseSchema = new Schema<ICourse>(
     completionRate: Number,
     averageRating: {
       type: Number,
-      default: 0,
       min: [1, "Course rating must be atleast 1"],
       max: [5, "Course rating cannot be greater than 5"],
     },
     courseLevel: {
       type: String,
-      required: [true, "Course level is required"],
-      enum: ["Beginner", "Intermediate", "Advanced"],
+      enum: Object.values(COURSE_LEVELS),
     },
     listPrice: {
-      price: {
-        type: Number,
-        required: [true, "Course price is required"],
-      },
+      price: Number,
       currencyName: {
         type: String,
         enum: CURRENCY_LIST.map((currency) => currency.name),
-        required: true,
       },
       currencyCode: {
         type: String,
         enum: CURRENCY_LIST.map((currency) => currency.code),
-        required: true,
       },
       currencySymbol: {
         type: String,
         enum: CURRENCY_LIST.map((currency) => currency.symbol),
-        required: true,
       },
     },
     discountedPrice: {
@@ -197,23 +197,20 @@ const courseSchema = new Schema<ICourse>(
       currencyName: {
         type: String,
         enum: CURRENCY_LIST.map((currency) => currency.name),
-        required: true,
       },
       currencyCode: {
         type: String,
         enum: CURRENCY_LIST.map((currency) => currency.code),
-        required: true,
       },
       currencySymbol: {
         type: String,
         enum: CURRENCY_LIST.map((currency) => currency.symbol),
-        required: true,
       },
     },
     discountPercentage: {
       type: Number,
-      required: true,
-      default: 0,
+      min: [1, "Course rating must be atleast 1"],
+      max: [100, "Course rating cannot be greater than 100"],
     },
     reviews: [
       {
@@ -229,8 +226,19 @@ const courseSchema = new Schema<ICourse>(
     ],
     totalEnrollments: {
       type: Number,
-      required: true,
       default: 0,
+    },
+    courseDuration: {
+      unit: {
+        type: String,
+        enum: Object.values(DURATION_UNITS),
+        required: [true, "Course duration unit is required"],
+      },
+      value: {
+        type: Number,
+        required: [true, "Course duration value is required"],
+        min: [1, "Course duration value must be atleast 1"],
+      },
     },
   },
   {
@@ -238,6 +246,8 @@ const courseSchema = new Schema<ICourse>(
   },
 );
 
+const CategoryModel = model<ICategory>("Category", categorySchema);
 const CourseModel = model<ICourse>("Course", courseSchema);
 
 export default CourseModel;
+export { CategoryModel };
