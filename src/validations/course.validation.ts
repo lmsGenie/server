@@ -63,30 +63,20 @@ const createCourseSchema = z.object({
       })
       .trim(),
 
-    courseLevel: z.enum(
-      [
-        COURSE_LEVELS.BEGINNER,
-        COURSE_LEVELS.INTERMEDIATE,
-        COURSE_LEVELS.ADVANCE,
-      ],
-      {
-        required_error: "Course level is required",
-        invalid_type_error: `Course level must be a one of ${Object.values(
-          COURSE_LEVELS,
-        )}`,
-      },
-    ),
+    courseLevel: z.enum(Object.values(COURSE_LEVELS) as [string, ...string[]], {
+      required_error: "Course level is required",
+      invalid_type_error: `Course level must be a one of ${Object.values(
+        COURSE_LEVELS,
+      )}`,
+    }),
 
     courseDuration: z.object({
-      unit: z.enum(
-        [DURATION_UNITS.MINUTES, DURATION_UNITS.HOURS, DURATION_UNITS.DAYS],
-        {
-          required_error: "Course duration unit is required",
-          invalid_type_error: `Course duration unit must be one of ${Object.values(
-            DURATION_UNITS,
-          )}`,
-        },
-      ),
+      unit: z.enum(Object.values(DURATION_UNITS) as [string, ...string[]], {
+        required_error: "Course duration unit is required",
+        invalid_type_error: `Course duration unit must be one of ${Object.values(
+          DURATION_UNITS,
+        )}`,
+      }),
       value: z
         .number({
           required_error: "Course duration value is required",
@@ -101,7 +91,7 @@ const createCourseSchema = z.object({
 
 const createCategorySchema = z.object({
   body: z.object({
-    type: z.enum([CATEGORY_TYPES.MAIN_CATEGORY, CATEGORY_TYPES.SUB_CATEGORY], {
+    type: z.enum(Object.values(CATEGORY_TYPES) as [string, ...string[]], {
       required_error: "Category type is required",
       invalid_type_error: `Category type must be one of ${Object.values(
         CATEGORY_TYPES,
