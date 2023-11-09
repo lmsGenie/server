@@ -1,3 +1,4 @@
+import createSlug from "@/helpers/slugGenerator";
 import CourseModel from "@/models/course.model";
 
 const createCourse = async (
@@ -10,7 +11,7 @@ const createCourse = async (
   courseLevel: string,
   courseDuration: string,
 ) => {
-  const slug = title.split(" ").join("-");
+  const slug = createSlug(title);
 
   const course = await CourseModel.create({
     title,
