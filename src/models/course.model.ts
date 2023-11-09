@@ -209,8 +209,8 @@ const courseSchema = new Schema<ICourse>(
     },
     discountPercentage: {
       type: Number,
-      min: [1, "Course rating must be atleast 1"],
-      max: [100, "Course rating cannot be greater than 100"],
+      min: [1, "Course discount percentage must be atleast 1"],
+      max: [100, "Course discount percentage cannot be greater than 100"],
     },
     reviews: [
       {
