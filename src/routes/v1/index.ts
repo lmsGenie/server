@@ -16,7 +16,7 @@ const defaultRoutes: DefaultRoutes[] = [
     route: authRoute,
   },
   {
-    path: "/course",
+    path: "/courses",
     route: courseRoute,
   },
 ];
