@@ -1,5 +1,6 @@
 import commonResponse from "@/helpers/commonResponse";
 import asyncHandler from "@/middlewares/asyncHandler.middleware";
+import categoryService from "@/services/category.service";
 import courseService from "@/services/course.service";
 
 const createCourse = asyncHandler(async (req, res) => {
@@ -31,7 +32,7 @@ const createCourse = asyncHandler(async (req, res) => {
 const createCategory = asyncHandler(async (req, res) => {
   const { type, name } = req.body;
 
-  const category = await courseService.createCategory(type, name);
+  const category = await categoryService.createCategory(type, name);
 
   return commonResponse(res, "Category created successfully", category, 201);
 });

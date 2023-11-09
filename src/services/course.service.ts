@@ -1,13 +1,4 @@
-import CourseModel, { CategoryModel } from "@/models/course.model";
-
-const createCategory = async (type: string, name: string) => {
-  const category = await CategoryModel.create({
-    type,
-    name,
-  });
-
-  return category;
-};
+import CourseModel from "@/models/course.model";
 
 const createCourse = async (
   title: string,
@@ -38,5 +29,4 @@ const createCourse = async (
 
 export default {
   createCourse,
-  createCategory,
 };
