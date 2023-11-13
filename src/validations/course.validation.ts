@@ -24,10 +24,10 @@ const createCourseSchema = z.object({
         invalid_type_error: "Course subtitle must be a string",
       })
       .min(8, {
-        message: "Course subtitle must be at least 2 characters",
+        message: "Course subtitle must be at least 8 characters",
       })
       .max(120, {
-        message: "Course subtitle cannot be more than 80 characters ",
+        message: "Course subtitle cannot be more than 120 characters ",
       })
       .trim(),
 
