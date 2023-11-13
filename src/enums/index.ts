@@ -12,7 +12,7 @@ export enum COURSE_LEVELS {
   ADVANCE = "ADVANCE",
 }
 
-export enum DURATION_UNITS {
+export enum COURSE_DURATION {
   MINUTES = "MINUTES",
   HOURS = "HOURS",
   DAYS = "DAYS",
