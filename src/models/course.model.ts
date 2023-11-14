@@ -1,5 +1,5 @@
 import { CATEGORY_TYPES, COURSE_DURATION, COURSE_LEVELS } from "@/enums";
-import { Document, model, Schema } from "mongoose";
+import mongoose, { Document, model, Schema } from "mongoose";
 
 import createSlug from "@/helpers/slugGenerator";
 import CURRENCY_LIST from "@/utils/currency";
@@ -250,7 +250,16 @@ const courseSchema = new Schema<ICourse>(
 // Method to create and update slug for course
 courseSchema.pre("save", async function (next) {
   if (!this.isModified("title")) return next();
-  this.slug = createSlug(this.title);
+
+  const newSlug = createSlug(this.title);
+  const result = await CourseModel.find({ slug: newSlug });
+
+  if (result.length === 0) {
+    this.slug = newSlug;
+  } else {
+    const uniqueString = new mongoose.Types.ObjectId().toString();
+    this.slug = `${newSlug}-${uniqueString.slice(-6, uniqueString.length)}`;
+  }
 
   next();
 });
