@@ -35,7 +35,7 @@ const createCourseSchema = z.object({
       .string({
         required_error: "Course category is required",
       })
-      .regex(/[0-9a-fA-F]{24}('))?/, {
+      .regex(/[0-9a-fA-F]{24}/, {
         message: "Course category id is invalid",
       }),
 
@@ -43,7 +43,7 @@ const createCourseSchema = z.object({
       .string({
         required_error: "Course subcategory is required",
       })
-      .regex(/[0-9a-fA-F]{24}('))?/, {
+      .regex(/[0-9a-fA-F]{24}/, {
         message: "Course subcategory id is invalid",
       }),
 
