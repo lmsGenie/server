@@ -34,16 +34,18 @@ const createCourseSchema = z.object({
     category: z
       .string({
         required_error: "Course category is required",
-        invalid_type_error: "Course category must be a string",
       })
-      .trim(),
+      .regex(/[0-9a-fA-F]{24}('))?/, {
+        message: "Course category id is invalid",
+      }),
 
     subCategory: z
       .string({
         required_error: "Course subcategory is required",
-        invalid_type_error: "Course subcategory must be a string",
       })
-      .trim(),
+      .regex(/[0-9a-fA-F]{24}('))?/, {
+        message: "Course subcategory id is invalid",
+      }),
 
     language: z.enum(LANGUAGE_LIST as [string, ...string[]], {
       required_error: "Course language is required",
