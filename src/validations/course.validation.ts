@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES, COURSE_DURATION, COURSE_LEVELS } from "@/enums";
+import { CATEGORY_TYPES, COURSE_LEVELS } from "@/enums";
 import { z } from "zod";
 
 import LANGUAGE_LIST from "@/utils/language";
@@ -72,22 +72,14 @@ const createCourseSchema = z.object({
       )}`,
     }),
 
-    courseDuration: z.object({
-      unit: z.enum(Object.values(COURSE_DURATION) as [string, ...string[]], {
-        required_error: "Course duration unit is required",
-        invalid_type_error: `Course duration unit must be one of ${Object.values(
-          COURSE_DURATION,
-        )}`,
+    courseDuration: z
+      .number({
+        required_error: "Course duration(in hrs) value is required",
+        invalid_type_error: "Course duration(in hrs) value must be number",
+      })
+      .min(1, {
+        message: "Course duration(in hrs) value must be atleast 1",
       }),
-      value: z
-        .number({
-          required_error: "Course duration value is required",
-          invalid_type_error: "Course duration value must be number",
-        })
-        .min(1, {
-          message: "Course duration value must be atleast 1",
-        }),
-    }),
   }),
 });
 

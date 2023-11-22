@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES, COURSE_DURATION, COURSE_LEVELS } from "@/enums";
+import { CATEGORY_TYPES, COURSE_LEVELS } from "@/enums";
 import mongoose, { Document, model, Schema } from "mongoose";
 
 import createSlug from "@/helpers/slugGenerator";
@@ -230,16 +230,9 @@ const courseSchema = new Schema<ICourse>(
       default: 0,
     },
     courseDuration: {
-      unit: {
-        type: String,
-        enum: Object.values(COURSE_DURATION),
-        required: [true, "Course duration unit is required"],
-      },
-      value: {
-        type: Number,
-        required: [true, "Course duration value is required"],
-        min: [1, "Course duration value must be atleast 1"],
-      },
+      type: Number,
+      required: [true, "Course duration(in hrs) value is required"],
+      min: [1, "Course duration(in hrs) value must be atleast 1"],
     },
   },
   {
