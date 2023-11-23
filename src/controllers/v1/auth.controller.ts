@@ -6,11 +6,11 @@ import tokenService from "@/services/token.service";
 
 /**
  * Register a new user in the system
- * @param {string} firstName - The first name of the user
- * @param {string} lastName - The last name of the user
+ * @param {string} firstName - The first name of the user (required)
+ * @param {string} lastName - The last name of the user (required)
  * @param {string} email - The email address of the user (required)
  * @param {string} password - The password for the user (required)
- * @returns {Promise<User[]>} - A promise that resolves to the registered user
+ * @returns {Object}  - an object containing success (boolean), message and user specific data
  * @path {POST} /api/v1/auth/new
  * @access Public
  */
@@ -41,8 +41,7 @@ const register = asyncHandler(async (req, res) => {
  * Login a user in the system
  * @param {string} email - The email address of the user (required)
  * @param {string} password - The password for the user (required)
- * @returns {Promise<User[]>} - A promise that resolves once the login process is
- * completed
+ * @returns {Object}  - an object containing success (boolean), message and user specific data
  * @path {POST} /api/v1/auth/
  * @access Public
  */
