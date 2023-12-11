@@ -6,6 +6,7 @@ import { authorizeRoles, isLoggedIn } from "@/middlewares/auth.middleware";
 import validate from "@/middlewares/validate.middleware";
 import {
   createCouponSchema,
+  deleteCouponSchema,
   updateCouponSchema,
 } from "@/validations/coupon.validation";
 
@@ -42,6 +43,14 @@ couponRoute.patch(
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
   validate(updateCouponSchema),
   couponController.update,
+);
+
+couponRoute.delete(
+  "/:couponId",
+  isLoggedIn,
+  authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  validate(deleteCouponSchema),
+  couponController.remove,
 );
 
 export default couponRoute;

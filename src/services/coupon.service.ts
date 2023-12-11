@@ -42,9 +42,24 @@ const update = async (couponId: string, couponData: UpdateCouponSchema) => {
   return coupon;
 };
 
+const remove = async (couponId: string) => {
+  const couponExists = await CouponModel.findById(couponId);
+
+  if (!couponExists) {
+    throw new AppErr("Coupon does not exist", 404);
+  }
+
+  const coupon = await CouponModel.findByIdAndDelete(couponId, {
+    new: true,
+  });
+
+  return coupon;
+};
+
 export default {
   create,
   getAll,
   findOne,
   update,
+  remove,
 };

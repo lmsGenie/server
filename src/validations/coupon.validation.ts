@@ -25,17 +25,23 @@ export const couponBodySchema = z.object({
   isActive: z.boolean({ coerce: true }).optional(),
 });
 
+export const couponParamsSchema = z.object({
+  couponId: z.string().regex(/(ObjectId\(')?[0-9a-fA-F]{24}('\))?/g, {
+    message: "Invalid Coupon Id",
+  }),
+});
+
 export const createCouponSchema = z.object({
   body: couponBodySchema,
 });
 
 export const updateCouponSchema = z.object({
   body: couponBodySchema.partial(),
-  params: z.object({
-    couponId: z.string().regex(/(ObjectId\(')?[0-9a-fA-F]{24}('\))?/g, {
-      message: "Invalid Coupon Id",
-    }),
-  }),
+  params: couponParamsSchema,
+});
+
+export const deleteCouponSchema = z.object({
+  params: couponParamsSchema,
 });
 
 export type CreateCouponSchema = z.infer<typeof createCouponSchema>["body"];

@@ -36,9 +36,18 @@ const update = asyncHandler(async (req, res) => {
   return commonResponse(res, "Coupon updated successfully", coupon);
 });
 
+const remove = asyncHandler(async (req, res) => {
+  const { couponId } = req.params;
+
+  const coupon = await couponService.remove(couponId);
+
+  return commonResponse(res, "Coupon deleted successfully", coupon);
+});
+
 export default {
   create,
   getAll,
   findOne,
   update,
+  remove,
 };
