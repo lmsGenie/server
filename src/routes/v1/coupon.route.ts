@@ -29,7 +29,14 @@ couponRoute.post(
   couponController.create,
 );
 
-couponRoute.post(
+couponRoute.get(
+  "/:couponId",
+  isLoggedIn,
+  authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  couponController.findOne,
+);
+
+couponRoute.patch(
   "/:couponId",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),

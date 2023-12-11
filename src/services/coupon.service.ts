@@ -1,4 +1,6 @@
+import AppErr from "@/helpers/appErr";
 import CouponModel from "@/models/coupon.model";
+import { UpdateCouponSchema } from "@/validations/coupon.validation";
 
 const create = async (
   couponCode: string,
@@ -26,8 +28,23 @@ const findOne = async (couponId: string) => {
   return coupon;
 };
 
+const update = async (couponId: string, couponData: UpdateCouponSchema) => {
+  const couponExists = await CouponModel.findById(couponId);
+
+  if (!couponExists) {
+    throw new AppErr("Coupon does not exist", 404);
+  }
+
+  const coupon = await CouponModel.findByIdAndUpdate(couponId, couponData, {
+    new: true,
+  });
+
+  return coupon;
+};
+
 export default {
   create,
   getAll,
   findOne,
+  update,
 };

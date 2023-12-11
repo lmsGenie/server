@@ -20,10 +20,18 @@ const getAll = asyncHandler(async (_req, res) => {
   return commonResponse(res, "Coupons fetched successfully", coupons);
 });
 
-const update = asyncHandler(async (req, res) => {
+const findOne = asyncHandler(async (req, res) => {
   const { couponId } = req.params;
 
   const coupon = await couponService.findOne(couponId);
+
+  return commonResponse(res, "Coupon fetched successfully", coupon);
+});
+
+const update = asyncHandler(async (req, res) => {
+  const { couponId } = req.params;
+
+  const coupon = await couponService.update(couponId, req.body);
 
   return commonResponse(res, "Coupon updated successfully", coupon);
 });
@@ -31,5 +39,6 @@ const update = asyncHandler(async (req, res) => {
 export default {
   create,
   getAll,
+  findOne,
   update,
 };
