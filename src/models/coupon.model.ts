@@ -3,6 +3,7 @@ import { model, Schema } from "mongoose";
 export interface ICoupon extends Document {
   couponCode: string;
   discountPercentage: number;
+  isActive: boolean;
 }
 
 const couponSchema = new Schema<ICoupon>({
@@ -12,6 +13,7 @@ const couponSchema = new Schema<ICoupon>({
     minlength: [6, "Coupon code must be at least 6 characters"],
     maxlength: [25, "Coupon code cannot exceed 25 characters"],
     uppercase: true,
+    unique: true,
     trim: true,
   },
   discountPercentage: {
@@ -20,8 +22,12 @@ const couponSchema = new Schema<ICoupon>({
     min: [0, "Discount percentage must be atleast 0"],
     max: [100, "Discount percentage cannot be more than 100"],
   },
+  isActive: {
+    type: Boolean,
+    default: true,
+  },
 });
 
-const Coupon = model<ICoupon>("Coupon", couponSchema);
+const CouponModel = model<ICoupon>("Coupon", couponSchema);
 
-export default Coupon;
+export default CouponModel;

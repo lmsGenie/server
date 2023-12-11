@@ -5,6 +5,9 @@ build:
 up-prod:
 	docker-compose -f docker-compose.yaml up
 
+build-dev:
+	docker-compose -f docker-compose.dev.yaml build
+
 up-dev:
 	docker-compose -f docker-compose.dev.yaml up
 

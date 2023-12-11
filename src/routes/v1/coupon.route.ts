@@ -3,6 +3,11 @@ import { ROLES_LIST } from "@/enums";
 import { Router } from "express";
 
 import { authorizeRoles, isLoggedIn } from "@/middlewares/auth.middleware";
+import validate from "@/middlewares/validate.middleware";
+import {
+  createCouponSchema,
+  updateCouponSchema,
+} from "@/validations/coupon.validation";
 
 const couponRoute = Router();
 
@@ -14,6 +19,22 @@ couponRoute.get(
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
   couponController.getAll,
+);
+
+couponRoute.post(
+  "/",
+  isLoggedIn,
+  authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  validate(createCouponSchema),
+  couponController.create,
+);
+
+couponRoute.post(
+  "/:couponId",
+  isLoggedIn,
+  authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  validate(updateCouponSchema),
+  couponController.update,
 );
 
 export default couponRoute;
