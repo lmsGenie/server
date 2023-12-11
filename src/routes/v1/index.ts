@@ -10,6 +10,9 @@ interface DefaultRoutes {
   route: Router;
 }
 
+/**
+ * Route: /api/v1/
+ */
 const defaultRoutes: DefaultRoutes[] = [
   {
     path: "/auth",

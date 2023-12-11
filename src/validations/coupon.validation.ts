@@ -13,7 +13,7 @@ export const couponSchema = z.object({
         message: "Coupon code cannot exceed 25 characters",
       })
       .trim(),
-    discountPercentage: z.coerce
+    discountPercentage: z.coerce // TODO: check if this works for string to number
       .number({
         required_error: "Discount percentage is required",
       })
