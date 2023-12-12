@@ -12,7 +12,7 @@ export const couponBodySchema = z.object({
       message: "Coupon code cannot exceed 25 characters",
     })
     .trim(),
-  discountPercentage: z.coerce // TODO: check if this works for string to number
+  discountPercentage: z.coerce
     .number({
       required_error: "Discount percentage is required",
     })
@@ -31,6 +31,22 @@ export const couponParamsSchema = z.object({
   }),
 });
 
+export const couponQuerySchema = z.object({
+  search: z.string().optional(),
+  fromDate: z.date({ coerce: true }).optional(),
+  toDate: z.date({ coerce: true }).optional(),
+  sortBy: z
+    .enum(["couponCode", "discountPercentage", "createdAt", "updatedAt"])
+    .optional(),
+  order: z.enum(["asc", "desc"]).optional(),
+  page: z.number({ coerce: true }).optional(),
+  limit: z.number({ coerce: true }).optional(),
+});
+
+export const getCouponSchema = z.object({
+  query: couponQuerySchema,
+});
+
 export const createCouponSchema = z.object({
   body: couponBodySchema,
 });
@@ -46,3 +62,4 @@ export const deleteCouponSchema = z.object({
 
 export type CreateCouponSchema = z.infer<typeof createCouponSchema>["body"];
 export type UpdateCouponSchema = z.infer<typeof updateCouponSchema>["body"];
+export type getCouponQuerySchema = z.infer<typeof getCouponSchema>["query"];

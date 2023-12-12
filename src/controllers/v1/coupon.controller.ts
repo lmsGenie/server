@@ -14,8 +14,8 @@ const create = asyncHandler(async (req, res) => {
   return commonResponse(res, "Coupon created successfully", coupon);
 });
 
-const getAll = asyncHandler(async (_req, res) => {
-  const coupons = await couponService.getAll();
+const getAll = asyncHandler(async (req, res) => {
+  const coupons = await couponService.findAll(req.query);
 
   return commonResponse(res, "Coupons fetched successfully", coupons);
 });

@@ -7,6 +7,7 @@ import validate from "@/middlewares/validate.middleware";
 import {
   createCouponSchema,
   deleteCouponSchema,
+  getCouponSchema,
   updateCouponSchema,
 } from "@/validations/coupon.validation";
 
@@ -19,6 +20,7 @@ couponRoute.get(
   "/",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  validate(getCouponSchema),
   couponController.getAll,
 );
 
