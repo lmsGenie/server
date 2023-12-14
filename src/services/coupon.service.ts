@@ -1,3 +1,5 @@
+import Logger from "@/logger";
+
 import AppErr from "@/helpers/appErr";
 import CouponModel from "@/models/coupon.model";
 import {
@@ -8,15 +10,21 @@ import {
 const create = async (
   couponCode: string,
   discountPercentage: number,
-  isActive?: boolean,
+  isActive: boolean = true,
 ) => {
-  const coupon = await CouponModel.create({
-    couponCode,
-    discountPercentage,
-    isActive,
-  });
+  try {
+    const coupon = await CouponModel.create({
+      couponCode,
+      discountPercentage,
+      isActive,
+    });
 
-  return coupon;
+    Logger.info(`Coupon ${coupon.couponCode} created successfully`);
+
+    return coupon;
+  } catch (error) {
+    throw new AppErr("Failed to create coupon", 500);
+  }
 };
 
 const findAll = async (queryObject: getCouponQuerySchema) => {
@@ -26,16 +34,35 @@ const findAll = async (queryObject: getCouponQuerySchema) => {
   const page = queryObject.page || 1;
   const skip = (page - 1) * limit;
 
-  const coupons = await CouponModel.find(queryObj)
-    .sort(sortObj)
-    .skip(skip)
-    .limit(limit);
+  try {
+    const totalCount = await CouponModel.countDocuments(queryObj);
+    const totalPages = Math.ceil(totalCount / limit);
 
-  return coupons;
+    const coupons = await CouponModel.find(queryObj)
+      .sort(sortObj)
+      .collation({ locale: "en" }) // Use collation for index-based sort
+      .skip(skip)
+      .limit(limit);
+
+    return {
+      coupons,
+      currentPage: page,
+      totalPages,
+      totalItems: totalCount,
+    };
+  } catch (error) {
+    throw new AppErr("Error occurred while finding coupons", 500);
+  }
 };
 
 const findOne = async (couponId: string) => {
   const coupon = await CouponModel.findById(couponId);
+
+  if (!coupon) {
+    throw new AppErr("Coupon not found", 404);
+  }
+
+  Logger.info(`Coupon ${coupon.couponCode} fetched successfully`);
 
   return coupon;
 };
@@ -51,6 +78,8 @@ const update = async (couponId: string, couponData: UpdateCouponSchema) => {
     new: true,
   });
 
+  Logger.info(`Coupon ${coupon?.couponCode} updated successfully`);
+
   return coupon;
 };
 
@@ -65,6 +94,8 @@ const remove = async (couponId: string) => {
     new: true,
   });
 
+  Logger.info(`Coupon ${coupon?.couponCode} deleted successfully`);
+
   return coupon;
 };
 
@@ -72,6 +103,7 @@ const filterObject = (object: getCouponQuerySchema) => {
   const { fromDate, toDate, search, sortBy, order } = object;
 
   const queryObj: Record<string, unknown> = {};
+  const sortObj: { [key: string]: "asc" | "desc" } = {};
 
   if (fromDate && toDate) {
     if (fromDate > toDate) {
@@ -88,8 +120,6 @@ const filterObject = (object: getCouponQuerySchema) => {
   if (search) {
     queryObj.couponCode = { $regex: search, $options: "i" };
   }
-
-  const sortObj: { [key: string]: "asc" | "desc" } = {};
 
   if (sortBy) {
     sortObj[sortBy] = order || "desc";

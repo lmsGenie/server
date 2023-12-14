@@ -56,7 +56,7 @@ export const updateCouponSchema = z.object({
   params: couponParamsSchema,
 });
 
-export const deleteCouponSchema = z.object({
+export const couponIdParamSchema = z.object({
   params: couponParamsSchema,
 });
 

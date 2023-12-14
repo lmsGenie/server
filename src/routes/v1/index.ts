@@ -1,7 +1,7 @@
 import express, { Router } from "express";
 
-import authRoute from "./auth.route";
-import couponRoute from "./coupon.route";
+import authRouter from "./auth.route";
+import couponRouter from "./coupon.route";
 
 const routerV1: Router = express.Router();
 
@@ -16,11 +16,11 @@ interface DefaultRoutes {
 const defaultRoutes: DefaultRoutes[] = [
   {
     path: "/auth",
-    route: authRoute,
+    route: authRouter,
   },
   {
     path: "/coupons",
-    route: couponRoute,
+    route: couponRouter,
   },
 ];
 

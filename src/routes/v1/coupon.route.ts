@@ -5,18 +5,18 @@ import { Router } from "express";
 import { authorizeRoles, isLoggedIn } from "@/middlewares/auth.middleware";
 import validate from "@/middlewares/validate.middleware";
 import {
+  couponIdParamSchema,
   createCouponSchema,
-  deleteCouponSchema,
   getCouponSchema,
   updateCouponSchema,
 } from "@/validations/coupon.validation";
 
-const couponRoute = Router();
+const couponRouter = Router();
 
 /**
  * @ROUTE {{URL}}/api/v1/coupons
  */
-couponRoute.get(
+couponRouter.get(
   "/",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
@@ -24,7 +24,7 @@ couponRoute.get(
   couponController.getAll,
 );
 
-couponRoute.post(
+couponRouter.post(
   "/",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
@@ -32,14 +32,15 @@ couponRoute.post(
   couponController.create,
 );
 
-couponRoute.get(
+couponRouter.get(
   "/:couponId",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
+  validate(couponIdParamSchema),
   couponController.findOne,
 );
 
-couponRoute.patch(
+couponRouter.patch(
   "/:couponId",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
@@ -47,12 +48,12 @@ couponRoute.patch(
   couponController.update,
 );
 
-couponRoute.delete(
+couponRouter.delete(
   "/:couponId",
   isLoggedIn,
   authorizeRoles(ROLES_LIST.ADMIN, ROLES_LIST.INSTRUCTOR),
-  validate(deleteCouponSchema),
+  validate(couponIdParamSchema),
   couponController.remove,
 );
 
-export default couponRoute;
+export default couponRouter;
