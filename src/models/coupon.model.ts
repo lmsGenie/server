@@ -20,7 +20,7 @@ const couponSchema = new Schema<ICoupon>(
     discountPercentage: {
       type: Number,
       required: [true, "Discount percentage is required"],
-      min: [0, "Discount percentage must be atleast 0"],
+      min: [1, "Discount percentage must be atleast 0"],
       max: [100, "Discount percentage cannot be more than 100"],
     },
     isActive: {
