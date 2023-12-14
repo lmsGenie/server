@@ -20,14 +20,14 @@ const create = async (
 };
 
 const findAll = async (queryObject: getCouponQuerySchema) => {
-  const filteredObject = filterObject(queryObject);
+  const { queryObj, sortObj } = filterObject(queryObject);
 
-  const limit = queryObject.limit ? queryObject.limit : 50;
-  const page = queryObject.page ? queryObject.page : 1;
+  const limit = queryObject.limit || 50;
+  const page = queryObject.page || 1;
   const skip = (page - 1) * limit;
 
-  const coupons = await CouponModel.find(filteredObject)
-    .sort(queryObject.order ? queryObject.order : "desc")
+  const coupons = await CouponModel.find(queryObj)
+    .sort(sortObj)
     .skip(skip)
     .limit(limit);
 
@@ -69,14 +69,13 @@ const remove = async (couponId: string) => {
 };
 
 const filterObject = (object: getCouponQuerySchema) => {
-  const { fromDate, toDate, search, sortBy } = object;
+  const { fromDate, toDate, search, sortBy, order } = object;
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  let queryObj: any;
+  const queryObj: Record<string, unknown> = {};
 
   if (fromDate && toDate) {
-    if (fromDate < toDate) {
-      throw new AppErr("fromDate cannot be less than toDate", 400);
+    if (fromDate > toDate) {
+      throw new AppErr("fromDate cannot be greater than toDate", 400);
     }
 
     if (sortBy === "createdAt" || sortBy === "updatedAt") {
@@ -86,34 +85,17 @@ const filterObject = (object: getCouponQuerySchema) => {
     }
   }
 
-  // if (sortBy) {
-  //   queryObj[sortBy] = order ? order : "desc";
-  // }
-
   if (search) {
-    queryObj = dbQuery(queryObj, "$or", [
-      {
-        couponCode: { $regex: search, $options: "i" },
-      },
-    ]);
+    queryObj.couponCode = { $regex: search, $options: "i" };
   }
 
-  console.log(JSON.stringify(queryObj, null, 2));
+  const sortObj: { [key: string]: "asc" | "desc" } = {};
 
-  // queryObj = dbQuery(queryObj);
-
-  return queryObj;
-};
-
-const dbQuery = (
-  queryObject: getCouponQuerySchema,
-  key: string,
-  value: unknown,
-) => {
-  if (value !== undefined && value !== null) {
-    return { ...queryObject, [key]: value };
+  if (sortBy) {
+    sortObj[sortBy] = order || "desc";
   }
-  return queryObject;
+
+  return { queryObj, sortObj };
 };
 
 export default {
