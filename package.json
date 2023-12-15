@@ -13,7 +13,7 @@
     "format:check": "prettier --check \"src/**/*.ts\"",
     "start:dev": "nodemon src/server.ts",
     "start:prod": "node dist/server.js",
-    "test": "jest --watch"
+    "test": "jest --watch --testTimeout=5000"
   },
   "keywords": [],
   "author": "",

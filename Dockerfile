@@ -12,6 +12,6 @@ RUN pnpm i
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 5500
 
 CMD [ "pnpm", "build:start" ]

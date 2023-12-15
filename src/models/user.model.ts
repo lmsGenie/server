@@ -22,7 +22,7 @@ export interface IUser extends Document {
   biography?: string;
   socialProfiles?: string[];
   profilePicture?: string;
-  slug: string;
+  slug?: string; // TODO: Make it work and required
   rating?: number;
   totalStudents?: number;
   enrolledCourses?: Schema.Types.ObjectId[];
@@ -137,8 +137,8 @@ const userSchema = new Schema<IUser>(
     },
     slug: {
       type: String,
-      required: [true, "Slug is required."],
-      unique: true,
+      // required: [true, "Slug is required."], // FIXME
+      // unique: true,
       lowercase: true,
     },
     rating: {
