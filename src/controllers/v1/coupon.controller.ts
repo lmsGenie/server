@@ -44,10 +44,28 @@ const remove = asyncHandler(async (req, res) => {
   return commonResponse(res, "Coupon deleted successfully", coupon);
 });
 
+const validate = asyncHandler(async (req, res) => {
+  const { couponCode } = req.body;
+
+  const coupon = await couponService.validate(couponCode);
+
+  return commonResponse(res, "Coupon validated successfully", coupon);
+});
+
+const apply = asyncHandler(async (req, res) => {
+  const { couponCode, amount } = req.body;
+
+  const coupon = await couponService.apply(couponCode, amount);
+
+  return commonResponse(res, "Coupon applied successfully", coupon);
+});
+
 export default {
   create,
   getAll,
   findOne,
   update,
   remove,
+  validate,
+  apply,
 };

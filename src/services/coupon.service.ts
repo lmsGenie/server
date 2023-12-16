@@ -128,10 +128,37 @@ const filterObject = (object: getCouponQuerySchema) => {
   return { queryObj, sortObj };
 };
 
+export const validate = async (couponCode: string) => {
+  const coupon = await CouponModel.findOne({ couponCode });
+
+  if (!coupon) {
+    throw new AppErr("Coupon is invalid or has expired.", 404);
+  }
+
+  if (!coupon.isActive) {
+    throw new AppErr("Coupon is invalid or has expired.", 400);
+  }
+
+  return coupon;
+};
+
+export const apply = async (couponCode: string, amount: number) => {
+  const coupon = await validate(couponCode);
+
+  const discount = (coupon.discountPercentage / 100) * amount;
+
+  return {
+    discount,
+    amount: amount - discount,
+  };
+};
+
 export default {
   create,
   findAll,
   findOne,
   update,
   remove,
+  validate,
+  apply,
 };
