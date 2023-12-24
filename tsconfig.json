@@ -20,7 +20,9 @@
     "./coverage",
     "./dist",
     "__tests__",
+    "tests",
     "jest.config.js",
-    "**/*.test.ts"
+    "**/*.test.ts",
+    "**/*.spec.ts"
   ]
 }

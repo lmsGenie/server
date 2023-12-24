@@ -1,7 +1,8 @@
 import express, { Router } from "express";
 
-import authRoute from "./auth.route";
-import courseRoute from "./course.route";
+import authRouter from "./auth.route";
+import couponRouter from "./coupon.route";
+import courseRouter from "./course.route";
 
 const routerV1: Router = express.Router();
 
@@ -10,14 +11,21 @@ interface DefaultRoutes {
   route: Router;
 }
 
+/**
+ * Route: /api/v1/
+ */
 const defaultRoutes: DefaultRoutes[] = [
   {
     path: "/auth",
-    route: authRoute,
+    route: authRouter,
+  },
+  {
+    path: "/coupons",
+    route: couponRouter,
   },
   {
     path: "/courses",
-    route: courseRoute,
+    route: courseRouter,
   },
 ];
 

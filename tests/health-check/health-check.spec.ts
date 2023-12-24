@@ -1,5 +1,6 @@
-import app from "@/app";
 import request from "supertest";
+
+import app from "../../src/app";
 
 describe("GET /api/ping", () => {
   it("should return 200 with message pong", async () => {
