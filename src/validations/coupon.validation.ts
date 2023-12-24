@@ -60,6 +60,27 @@ export const couponIdParamSchema = z.object({
   params: couponParamsSchema,
 });
 
+export const validateCouponSchema = z.object({
+  body: z.object({
+    couponCode: z.string({
+      required_error: "Coupon code is required",
+    }),
+  }),
+});
+
+export const applyCouponSchema = z.object({
+  body: z.object({
+    couponCode: z.string({
+      required_error: "Coupon code is required",
+    }),
+    amount: z.number({
+      coerce: true,
+      required_error: "Amount is required",
+    }),
+  }),
+});
+
 export type CreateCouponSchema = z.infer<typeof createCouponSchema>["body"];
 export type UpdateCouponSchema = z.infer<typeof updateCouponSchema>["body"];
 export type getCouponQuerySchema = z.infer<typeof getCouponSchema>["query"];
+export type ValidateCouponSchema = z.infer<typeof validateCouponSchema>["body"];
