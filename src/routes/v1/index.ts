@@ -2,6 +2,7 @@ import express, { Router } from "express";
 
 import authRouter from "./auth.route";
 import couponRouter from "./coupon.route";
+import courseRouter from "./course.route";
 
 const routerV1: Router = express.Router();
 
@@ -21,6 +22,10 @@ const defaultRoutes: DefaultRoutes[] = [
   {
     path: "/coupons",
     route: couponRouter,
+  },
+  {
+    path: "/courses",
+    route: courseRouter,
   },
 ];
 
