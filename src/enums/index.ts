@@ -21,7 +21,6 @@ export enum COURSE_STATUS {
   ACTIVE = "ACTIVE",
   INACTIVE = "INACTIVE",
   DRAFT = "DRAFT",
-  REJECTED = "REJECTED",
 }
 
 export enum PAYMENT_STATUS {
