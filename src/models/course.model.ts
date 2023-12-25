@@ -1,4 +1,4 @@
-import { CATEGORY_TYPES, COURSE_LEVELS } from "@/enums";
+import { CATEGORY_TYPES, COURSE_LEVELS, COURSE_STATUS } from "@/enums";
 import mongoose, { Document, model, Schema } from "mongoose";
 
 import createSlug from "@/helpers/slugGenerator";
@@ -22,6 +22,7 @@ export interface ICourse extends Document {
   welcomeMessage?: string;
   completionMessage?: string;
   completionRate?: number;
+  status: COURSE_STATUS;
   averageRating?: number;
   sections?: Schema.Types.ObjectId[];
   tools?: Schema.Types.ObjectId[];
@@ -169,6 +170,11 @@ const courseSchema = new Schema<ICourse>(
       lowercase: true,
     },
     completionRate: Number,
+    status: {
+      type: String,
+      enum: Object.values(COURSE_STATUS),
+      default: COURSE_STATUS.DRAFT,
+    },
     averageRating: {
       type: Number,
       min: [1, "Course rating must be atleast 1"],
