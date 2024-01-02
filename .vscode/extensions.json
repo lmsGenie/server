@@ -2,6 +2,7 @@
   "recommendations": [
     "dbaeumer.vscode-eslint",
     "esbenp.prettier-vscode",
-    "rohit-gohri.format-code-action"
+    "rohit-gohri.format-code-action",
+    "ms-vscode.makefile-tools"
   ]
 }

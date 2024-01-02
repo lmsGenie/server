@@ -1,8 +1,9 @@
+import { PAYMENT_STATUS } from "@/enums";
 import { Document, model, Schema } from "mongoose";
 
 import CURRENCY_LIST from "@/utils/currency";
 
-interface ICourses {
+export interface ICourses {
   course: Schema.Types.ObjectId;
   price: number;
 }
@@ -15,59 +16,74 @@ export interface IOrder extends Document {
   subTotal: number;
   orderTotal: number;
   paymentMethod: string;
-  orderStatus?: string;
+  paymentStatus?: PAYMENT_STATUS;
   coupon?: Schema.Types.ObjectId;
   transactionId?: string;
+  paymentResponse?: unknown;
 }
 
-const orderSchema = new Schema<IOrder>({
-  courses: [
-    {
+const orderSchema = new Schema<IOrder>(
+  {
+    courses: [
+      {
+        course: {
+          type: Schema.Types.ObjectId,
+          ref: "Course",
+          required: true,
+        },
+        price: {
+          type: Number,
+          required: true,
+        },
+      },
+    ],
+    user: {
       type: Schema.Types.ObjectId,
-      ref: "Course",
+      ref: "User",
       required: true,
     },
-  ],
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
+    phoneNumber: {
+      type: String,
+      required: [true, "Phone number is required"],
+      minlength: [10, "Phone number must be at least 10 characters"],
+      maxlength: [15, "Phone number cannot be more than 10 characters"],
+      trim: true,
+    },
+    currencyCode: {
+      type: String,
+      enum: CURRENCY_LIST.map((currency) => currency.code),
+      required: [true, "Currency code is required"],
+    },
+    subTotal: {
+      type: Number,
+      required: [true, "Order sub total is required"],
+    },
+    orderTotal: {
+      type: Number,
+      required: [true, "Order toal is required"],
+    },
+    paymentMethod: {
+      type: String,
+      required: [true, "Payment method is required"],
+    },
+    paymentStatus: {
+      type: String,
+      required: [true, "Payment status is required"],
+      enum: Object.values(PAYMENT_STATUS),
+    },
+    paymentResponse: {
+      type: Object,
+    },
+    coupon: {
+      type: Schema.Types.ObjectId,
+      ref: "Coupon",
+    },
+    transactionId: String,
   },
-  phoneNumber: {
-    type: String,
-    required: [true, "Phone number is required"],
-    minlength: [10, "Phone number must be at least 10 characters"],
-    maxlength: [15, "Phone number cannot be more than 10 characters"],
-    trim: true,
+  {
+    timestamps: true,
   },
-  currencyCode: {
-    type: String,
-    enum: CURRENCY_LIST.map((currency) => currency.code),
-    required: [true, "Currency code is required"],
-  },
-  subTotal: {
-    type: Number,
-    required: [true, "Order sub total is required"],
-  },
-  orderTotal: {
-    type: Number,
-    required: [true, "Order toal is required"],
-  },
-  paymentMethod: {
-    type: String,
-    required: [true, "Payment method is required"],
-  },
-  orderStatus: {
-    type: String,
-    required: [true, "Order status is required"],
-    enum: ["ORDERED", "PENDING", "REFUNDED"],
-  },
-  coupon: {
-    type: Schema.Types.ObjectId,
-    ref: "Coupon",
-  },
-  transactionId: String,
-});
+);
 
 const OrderModel = model<IOrder>("Order", orderSchema);
 
