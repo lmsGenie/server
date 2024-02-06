@@ -132,3 +132,5 @@ dist
 
 #others
 upload
+# Sentry Config File
+.sentryclirc

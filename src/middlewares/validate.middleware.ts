@@ -3,6 +3,7 @@
  * UPDATE: Updated the zod validation middleware🚑️https://jeffsegovia.dev/blogs/rest-api-validation-using-zod
  * https://www.imadatyat.me/guides/schema-validation-with-zod-and-expressjs
  */
+import * as Sentry from "@sentry/node"; // Import Sentry
 import { NextFunction, Request, Response } from "express";
 import { AnyZodObject, ZodOptional } from "zod";
 
@@ -28,6 +29,9 @@ const validate =
       });
 
       const error = allErrors.join(", ");
+
+      // Send error to Sentry
+      Sentry.captureException(err);
 
       if (process.env.NODE_ENV === "production") {
         return next(new AppErr(error, 400));
