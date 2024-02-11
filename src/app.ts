@@ -10,6 +10,7 @@ import helmet from "helmet";
 
 import CONFIG from "./configs";
 import morganMiddleware from "./configs/morgan";
+import stripeController from "./controllers/v1/stripe.controller";
 import errorMiddleware from "./middlewares/error.middleware";
 import requestInfo from "./middlewares/requestInfo.middleware";
 import routerV1 from "./routes/v1";
@@ -37,6 +38,13 @@ app.use(Sentry.Handlers.requestHandler());
 
 // TracingHandler creates a trace for every incoming request
 app.use(Sentry.Handlers.tracingHandler());
+
+// Stripe Webhook
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  stripeController.webhook,
+);
 
 // Middlewares
 // Uncomment the following line if behind a load balancer or reverse proxy

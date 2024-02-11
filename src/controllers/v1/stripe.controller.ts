@@ -10,20 +10,27 @@ import asyncHandler from "@/middlewares/asyncHandler.middleware";
 import stripeService from "@/services/stripe.service";
 import HTTP_STATUS from "@/utils/httpStatus";
 
-// Stripe webhook
-// This is your Stripe CLI webhook secret for testing your endpoint locally.
-const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET as string;
+const config = asyncHandler(async (req, res) => {
+  const stripeConfig = stripeService.config();
 
-const stripe = new Stripe(CONFIG.STRIPE.SECRET_KEY);
+  return commonResponse(
+    res,
+    "Stripe configuration",
+    stripeConfig,
+    HTTP_STATUS.OK,
+  );
+});
 
 const webhook = async (req: Request, res: Response) => {
+  const webhookSecret = CONFIG.STRIPE.WEBHOOK_SECRET;
+
+  const stripe = new Stripe(CONFIG.STRIPE.SECRET_KEY);
+
   const sig = req.headers["stripe-signature"];
 
   let event: Stripe.Event;
 
   try {
-    // TODO: Complete stripe integration
-    // eslint-disable-next-line @typescript-eslint/no-non-null-assertion, no-unused-vars, @typescript-eslint/no-unused-vars
     event = stripe.webhooks.constructEvent(req.body, sig!, webhookSecret);
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
   } catch (err: any) {
@@ -31,6 +38,44 @@ const webhook = async (req: Request, res: Response) => {
     res.status(400).send(`Webhook Error: ${err.message}`);
     return;
   }
+
+  if (event.type === "payment_intent.created") {
+    // const paymentIntent = event.data.object;
+
+    Logger.info("PaymentIntent was successful!");
+  }
+
+  if (event.type === "payment_intent.canceled") {
+    // const paymentIntent = event.data.object;
+
+    Logger.info("PaymentIntent was canceled!");
+  }
+
+  if (event.type === "payment_intent.payment_failed") {
+    // const paymentIntent = event.data.object;
+
+    Logger.info("PaymentIntent payment failed!");
+  }
+
+  if (event.type === "payment_intent.processing") {
+    // const paymentIntent = event.data.object;
+
+    Logger.info("PaymentIntent is processing!");
+  }
+
+  if (event.type === "payment_intent.requires_action") {
+    // const paymentIntent = event.data.object;
+
+    Logger.info("PaymentIntent requires action!");
+  }
+
+  if (event.type === "payment_intent.succeeded") {
+    // const paymentIntent = event.data.object;
+
+    Logger.info("PaymentIntent succeeded!");
+  }
+
+  res.send();
 };
 
 const createPaymentIntent = asyncHandler(
@@ -50,6 +95,7 @@ const createPaymentIntent = asyncHandler(
 );
 
 export default {
+  config,
   webhook,
   createPaymentIntent,
 };

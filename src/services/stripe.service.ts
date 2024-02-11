@@ -1,3 +1,4 @@
+import CONFIG from "@/configs";
 import stripe from "@/configs/stripe";
 import Logger from "@/logger";
 import Stripe from "stripe";
@@ -7,6 +8,19 @@ import { ProtectedRequest } from "@/types/app-request";
 import AppErr from "@/helpers/appErr";
 import { calculateTotalAmount } from "@/helpers/calcTotalAmount";
 import HTTP_STATUS from "@/utils/httpStatus";
+
+const config = () => {
+  if (CONFIG.STRIPE.PUBLISHABLE_KEY) {
+    return {
+      publishableKey: CONFIG.STRIPE.PUBLISHABLE_KEY,
+    };
+  } else {
+    throw new AppErr(
+      "Stripe publishable key not found",
+      HTTP_STATUS.INTERNAL_SERVER_ERROR,
+    );
+  }
+};
 
 export const createPaymentIntent = async (req: ProtectedRequest) => {
   try {
@@ -35,7 +49,10 @@ export const createPaymentIntent = async (req: ProtectedRequest) => {
         customerId = createdCusomter.id;
       } catch (error) {
         Logger.error(error);
-        throw new AppErr("Something went wrong, please try again", 500);
+        throw new AppErr(
+          "Something went wrong, please try again",
+          HTTP_STATUS.INTERNAL_SERVER_ERROR,
+        );
       }
     } else {
       customerId = customer.data[0].id;
@@ -45,19 +62,45 @@ export const createPaymentIntent = async (req: ProtectedRequest) => {
       amount: totalAmount * 100,
       currency,
       customer: customerId,
+      automatic_payment_methods: {
+        enabled: true,
+      },
     });
 
-    return paymentIntent;
+    try {
+      const paymentConfirm = await stripe.paymentIntents.confirm(
+        paymentIntent.id,
+        {
+          payment_method: "pm_card_visa",
+          return_url: "http://shivamvijaywargi.dev",
+        },
+      );
+
+      return paymentConfirm;
+    } catch (error) {
+      Logger.error(error);
+      throw new AppErr(
+        "Something went wrong, please try again",
+        HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      );
+    }
   } catch (error) {
     Logger.error(error);
     if (error instanceof Stripe.errors.StripeError) {
-      throw new AppErr(error.message, error.statusCode ?? 500);
+      throw new AppErr(
+        error.message,
+        error.statusCode ?? HTTP_STATUS.INTERNAL_SERVER_ERROR,
+      );
     }
 
-    throw new AppErr("Something went wrong at Stripe's end", 500);
+    throw new AppErr(
+      "Something went wrong at Stripe's end",
+      HTTP_STATUS.INTERNAL_SERVER_ERROR,
+    );
   }
 };
 
 export default {
+  config,
   createPaymentIntent,
 };
