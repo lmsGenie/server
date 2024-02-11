@@ -3,11 +3,11 @@ import { COURSE_STATUS } from "@/enums";
 import { ProtectedRequest } from "@/types/app-request";
 
 import AppErr from "@/helpers/appErr";
+import { calculateTotalAmount } from "@/helpers/calcTotalAmount";
 import CourseModel from "@/models/course.model";
 import OrderModel, { ICourses } from "@/models/order.model";
 import HTTP_STATUS from "@/utils/httpStatus";
 
-// FIXME: Payment Stripe
 const create = async (req: ProtectedRequest) => {
   const {
     phoneNumber,
@@ -35,6 +35,12 @@ const create = async (req: ProtectedRequest) => {
     );
   }
 
+  const orderTotalPrice = await calculateTotalAmount(courses, coupon);
+
+  if (orderTotalPrice !== orderTotal) {
+    throw new AppErr("Order total price mismatch", HTTP_STATUS.BAD_REQUEST);
+  }
+
   const order = new OrderModel({
     phoneNumber,
     subTotal,
@@ -51,7 +57,16 @@ const create = async (req: ProtectedRequest) => {
     order.coupon = coupon;
   }
 
-  await order.save();
+  try {
+    await order.save();
+  } catch (error) {
+    throw new AppErr(
+      "Something went wrong, please try again.",
+      HTTP_STATUS.INTERNAL_SERVER_ERROR,
+    );
+  }
+
+  return order;
 };
 
 export default {

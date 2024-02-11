@@ -1,6 +1,8 @@
 import stripeController from "@/controllers/v1/stripe.controller";
 import { raw, Router } from "express";
 
+import { isLoggedIn } from "@/middlewares/auth.middleware";
+
 const stripeRouter = Router();
 
 /**
@@ -12,6 +14,6 @@ stripeRouter
 
 stripeRouter
   .route("/create-payment-intent")
-  .post(stripeController.createPaymentIntent);
+  .post(isLoggedIn, stripeController.createPaymentIntent);
 
 export default stripeRouter;

@@ -3,7 +3,12 @@ import Logger from "@/logger";
 import { Request, Response } from "express";
 import Stripe from "stripe";
 
+import { ProtectedRequest } from "@/types/app-request";
+
+import commonResponse from "@/helpers/commonResponse";
 import asyncHandler from "@/middlewares/asyncHandler.middleware";
+import stripeService from "@/services/stripe.service";
+import HTTP_STATUS from "@/utils/httpStatus";
 
 // Stripe webhook
 // This is your Stripe CLI webhook secret for testing your endpoint locally.
@@ -29,15 +34,18 @@ const webhook = async (req: Request, res: Response) => {
 };
 
 const createPaymentIntent = asyncHandler(
-  async (req: Request, res: Response) => {
-    const { amount, currency } = req.body;
+  async (req: ProtectedRequest, res: Response) => {
+    const paymentIntent = await stripeService.createPaymentIntent(req);
 
-    const paymentIntent = await stripe.paymentIntents.create({
-      amount,
-      currency,
-    });
-
-    res.status(200).json({ clientSecret: paymentIntent.client_secret });
+    return commonResponse(
+      res,
+      "Payment intent created",
+      {
+        clientSecret: paymentIntent.client_secret,
+        paymentIntentId: paymentIntent.id,
+      },
+      HTTP_STATUS.CREATED,
+    );
   },
 );
 
