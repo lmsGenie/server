@@ -1,5 +1,7 @@
 import "dotenv/config";
 
+import * as Sentry from "@sentry/node";
+import { ProfilingIntegration } from "@sentry/profiling-node";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -8,12 +10,41 @@ import helmet from "helmet";
 
 import CONFIG from "./configs";
 import morganMiddleware from "./configs/morgan";
+import stripeController from "./controllers/v1/stripe.controller";
 import errorMiddleware from "./middlewares/error.middleware";
 import requestInfo from "./middlewares/requestInfo.middleware";
 import routerV1 from "./routes/v1";
 import HTTP_STATUS from "./utils/httpStatus";
 
 const app = express();
+
+Sentry.init({
+  dsn: CONFIG.SENTRY_DSN,
+  integrations: [
+    // enable HTTP calls tracing
+    new Sentry.Integrations.Http({ tracing: true }),
+    // enable Express.js middleware tracing
+    new Sentry.Integrations.Express({ app }),
+    new ProfilingIntegration(),
+  ],
+  // Performance Monitoring
+  tracesSampleRate: 1.0, //  Capture 100% of the transactions
+  // Set sampling rate for profiling - this is relative to tracesSampleRate
+  profilesSampleRate: 1.0,
+});
+
+// The request handler must be the first middleware on the app
+app.use(Sentry.Handlers.requestHandler());
+
+// TracingHandler creates a trace for every incoming request
+app.use(Sentry.Handlers.tracingHandler());
+
+// Stripe Webhook
+app.post(
+  "/webhook",
+  express.raw({ type: "application/json" }),
+  stripeController.webhook,
+);
 
 // Middlewares
 // Uncomment the following line if behind a load balancer or reverse proxy
@@ -69,6 +100,9 @@ app.all("*", (req, res) => {
     message: `Not Found - ${req.method} ${req.originalUrl}`,
   });
 });
+
+// The error handler must be registered before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler());
 
 // Custom error middleware (⚠️ should always be the last middleware)
 app.use(errorMiddleware);

@@ -45,6 +45,47 @@ const sendVerificationMail = async (
   return sendEmail(to, subject, data);
 };
 
+interface ICourseDetails {
+  courseName: string;
+  courseUrl: string;
+  orderNumber: string;
+  dateOfPurchase: string;
+  totalAmount: string;
+  companyName: string;
+}
+
+const orderConfirmationMail = async (
+  to: string,
+  name: string,
+  courseDetails: ICourseDetails,
+) => {
+  const {
+    courseName,
+    courseUrl,
+    dateOfPurchase,
+    orderNumber,
+    totalAmount,
+    companyName,
+  } = courseDetails;
+
+  const subject = "Order Confirmation";
+
+  const template = path.join(__dirname, "../templates/orderConfirmation.ejs");
+
+  const data = await ejs.renderFile(template, {
+    name,
+    courseName,
+    courseUrl,
+    dateOfPurchase,
+    orderNumber,
+    totalAmount,
+    companyName,
+  });
+
+  return sendEmail(to, subject, data);
+};
+
 export default {
   sendVerificationMail,
+  orderConfirmationMail,
 };

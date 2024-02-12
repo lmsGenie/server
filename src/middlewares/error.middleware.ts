@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-unused-vars */
 import Logger from "@/logger";
+import * as Sentry from "@sentry/node";
 import { ErrorRequestHandler, NextFunction, Request, Response } from "express";
 
 import AppErr from "@/helpers/appErr";
@@ -39,6 +40,9 @@ const errorMiddleware: ErrorRequestHandler = async (
   }
 
   Logger.error(err.message);
+
+  // Send error to Sentry
+  Sentry.captureException(err);
 
   if (process.env.NODE_ENV === "production") {
     res.status(err.statusCode).json({

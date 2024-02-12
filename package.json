@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "rimraf ./dist && swc ./src -d dist",
+    "build": "rimraf ./dist && swc ./src -s -d dist && pnpm sentry:sourcemaps",
     "build:start": "pnpm build && pnpm start:prod",
     "lint:fix": "eslint --ignore-path .eslintignore \"src/**/*.ts\" --fix",
     "lint:check": "eslint --ignore-path .eslintignore \"src/**/*.ts\"",
@@ -13,13 +13,17 @@
     "format:check": "prettier --check \"src/**/*.ts\"",
     "start:dev": "nodemon src/server.ts",
     "start:prod": "node dist/server.js",
-    "test": "jest --watch --testTimeout=5000"
+    "test": "jest --watch --testTimeout=5000",
+    "sentry:sourcemaps": "sentry-cli sourcemaps inject --org httpsshivamvijaywargidev --project node-express ./dist && sentry-cli sourcemaps upload --org httpsshivamvijaywargidev --project node-express ./dist"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.441.0",
+    "@sentry/cli": "^2.28.0",
+    "@sentry/node": "^7.99.0",
+    "@sentry/profiling-node": "^1.3.5",
     "bcrypt": "^5.1.1",
     "cloudinary": "^1.41.0",
     "cookie-parser": "^1.4.6",
@@ -36,6 +40,7 @@
     "morgan": "^1.10.0",
     "nodemailer": "^6.9.4",
     "slugify": "^1.6.6",
+    "stripe": "^14.14.0",
     "winston": "^3.10.0",
     "winston-daily-rotate-file": "^4.7.1",
     "zod": "^3.22.2"

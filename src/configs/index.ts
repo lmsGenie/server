@@ -30,6 +30,12 @@ const CONFIG = {
   CLOUDINARY_API_KEY: process.env.CLOUDINARY_API_KEY,
   CLOUDINARY_SECRET_KEY: process.env.CLOUDINARY_SECRET_KEY,
   S3_BUCKET_REGION: process.env.S3_BUCKET_REGION,
+  STRIPE: {
+    PUBLISHABLE_KEY: process.env.STRIPE_PUBLISHABLE_KEY || "",
+    SECRET_KEY: process.env.STRIPE_SECRET_KEY || "",
+    WEBHOOK_SECRET: process.env.STRIPE_WEBHOOK_SECRET || "",
+  },
+  SENTRY_DSN: process.env.SENTRY_DSN || "",
 };
 
 export default CONFIG;

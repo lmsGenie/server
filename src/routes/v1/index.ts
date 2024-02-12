@@ -3,6 +3,8 @@ import express, { Router } from "express";
 import authRouter from "./auth.route";
 import couponRouter from "./coupon.route";
 import courseRouter from "./course.route";
+import orderRouter from "./order.route";
+import stripeRouter from "./stripe.route";
 
 const routerV1: Router = express.Router();
 
@@ -26,6 +28,14 @@ const defaultRoutes: DefaultRoutes[] = [
   {
     path: "/courses",
     route: courseRouter,
+  },
+  {
+    path: "/orders",
+    route: orderRouter,
+  },
+  {
+    path: "/stripe",
+    route: stripeRouter,
   },
 ];
 
